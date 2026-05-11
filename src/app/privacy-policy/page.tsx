@@ -37,7 +37,7 @@ export default function PrivacyPolicyPage() {
           <p className="mb-3 text-xs font-semibold uppercase tracking-[0.2em] text-accent">
             Privacy Policy
           </p>
-          <h1 className="thai-heading font-display font-bold text-ink text-[clamp(26px,5.5vw,40px)] leading-[1.2]">
+          <h1 className="thai-heading font-display text-3xl sm:text-4xl font-semibold tracking-tight leading-tight text-ink">
             นโยบายความเป็นส่วนตัว
           </h1>
           <p className="mt-3 text-sm text-ink-soft">
@@ -81,7 +81,7 @@ export default function PrivacyPolicyPage() {
           </p>
 
           <section id="data-we-collect">
-            <h2 className="mb-3 font-display text-xl font-bold text-ink">
+            <h2 className="mb-3 font-display text-xl font-semibold tracking-tight text-ink">
               1. ข้อมูลที่เราเก็บรวบรวม
             </h2>
             <h3 className="mb-2 mt-4 font-display text-base font-semibold text-ink">
@@ -121,7 +121,7 @@ export default function PrivacyPolicyPage() {
           </section>
 
           <section id="purpose">
-            <h2 className="mb-3 font-display text-xl font-bold text-ink">
+            <h2 className="mb-3 font-display text-xl font-semibold tracking-tight text-ink">
               2. วัตถุประสงค์การใช้ข้อมูล
             </h2>
             <ul className="ml-5 list-disc space-y-1">
@@ -134,7 +134,7 @@ export default function PrivacyPolicyPage() {
           </section>
 
           <section id="cookies">
-            <h2 className="mb-3 font-display text-xl font-bold text-ink">
+            <h2 className="mb-3 font-display text-xl font-semibold tracking-tight text-ink">
               3. การใช้คุกกี้
             </h2>
             <p>
@@ -186,7 +186,7 @@ export default function PrivacyPolicyPage() {
           </section>
 
           <section id="third-parties">
-            <h2 className="mb-3 font-display text-xl font-bold text-ink">
+            <h2 className="mb-3 font-display text-xl font-semibold tracking-tight text-ink">
               4. การเปิดเผยข้อมูลกับบุคคลที่สาม
             </h2>
             <p>
@@ -208,7 +208,7 @@ export default function PrivacyPolicyPage() {
           </section>
 
           <section id="your-rights">
-            <h2 className="mb-3 font-display text-xl font-bold text-ink">
+            <h2 className="mb-3 font-display text-xl font-semibold tracking-tight text-ink">
               5. สิทธิของเจ้าของข้อมูล
             </h2>
             <p>ภายใต้ PDPA ท่านมีสิทธิ 8 ประการ ดังนี้</p>
@@ -239,7 +239,7 @@ export default function PrivacyPolicyPage() {
           </section>
 
           <section id="retention">
-            <h2 className="mb-3 font-display text-xl font-bold text-ink">
+            <h2 className="mb-3 font-display text-xl font-semibold tracking-tight text-ink">
               6. ระยะเวลาเก็บข้อมูล
             </h2>
             <ul className="ml-5 list-disc space-y-1">
@@ -252,7 +252,7 @@ export default function PrivacyPolicyPage() {
           </section>
 
           <section id="contact-dpo">
-            <h2 className="mb-3 font-display text-xl font-bold text-ink">
+            <h2 className="mb-3 font-display text-xl font-semibold tracking-tight text-ink">
               7. การติดต่อ DPO
             </h2>
             <div className="rounded-xl border border-line bg-white/60 p-5">
@@ -288,7 +288,7 @@ export default function PrivacyPolicyPage() {
           </section>
 
           <section id="changes">
-            <h2 className="mb-3 font-display text-xl font-bold text-ink">
+            <h2 className="mb-3 font-display text-xl font-semibold tracking-tight text-ink">
               8. การเปลี่ยนแปลงนโยบาย
             </h2>
             <p>

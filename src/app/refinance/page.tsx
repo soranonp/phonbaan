@@ -85,7 +85,7 @@ export default function RefinancePage() {
     >
       <section className="container-wrap py-12">
         <div className="mx-auto max-w-2xl text-center">
-          <h2 className="font-display text-2xl font-bold text-ink md:text-3xl">
+          <h2 className="font-display text-2xl md:text-3xl font-semibold tracking-tight text-ink">
             วิธีใช้งาน 3 ขั้นตอน
           </h2>
         </div>
@@ -111,7 +111,7 @@ export default function RefinancePage() {
       <section className="container-wrap py-12">
         <div className="rounded-3xl border border-line bg-white/70 p-6 md:p-10">
           <div className="mx-auto max-w-2xl text-center">
-            <h2 className="font-display text-2xl font-bold text-ink md:text-3xl">
+            <h2 className="font-display text-2xl md:text-3xl font-semibold tracking-tight text-ink">
               เช็คก่อนรีไฟแนนซ์
             </h2>
             <p className="mt-2 text-sm text-ink-soft md:text-base">

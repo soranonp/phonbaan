@@ -104,7 +104,7 @@ export default function ContactPage() {
         <p className="mb-3 text-xs font-semibold uppercase tracking-[0.2em] text-accent">
           Contact
         </p>
-        <h1 className="thai-heading mx-auto max-w-3xl font-display font-bold leading-[1.15] text-ink text-[clamp(26px,6vw,52px)]">
+        <h1 className="thai-heading mx-auto max-w-3xl font-display text-3xl sm:text-4xl md:text-5xl font-semibold tracking-tight leading-tight text-ink">
           มีคำถาม ข้อเสนอแนะ
           หรืออยากให้เพิ่ม<em className="text-accent">เครื่องมือ?</em>
         </h1>
@@ -143,7 +143,7 @@ export default function ContactPage() {
 
       {/* Topics */}
       <section className="container-wrap mx-auto max-w-4xl pb-14">
-        <h2 className="mb-6 text-center font-display text-2xl font-bold text-ink">
+        <h2 className="mb-6 text-center font-display text-2xl font-semibold tracking-tight text-ink">
           ติดต่อเรื่องอะไรได้บ้าง
         </h2>
         <div className="grid gap-4 sm:grid-cols-2">
@@ -177,7 +177,7 @@ export default function ContactPage() {
 
       {/* FAQ */}
       <section className="container-wrap mx-auto max-w-3xl pb-20">
-        <h2 className="mb-6 text-center font-display text-2xl font-bold text-ink">
+        <h2 className="mb-6 text-center font-display text-2xl font-semibold tracking-tight text-ink">
           คำถามที่พบบ่อย
         </h2>
         <AccordionFAQ items={faqs} />

@@ -1,6 +1,9 @@
 import type { ReactNode } from "react";
 import Link from "next/link";
 import { thaiSlug } from "@/lib/blog";
+import PMTFormulaDiagram from "./PMTFormulaDiagram";
+import LoanComparisonChart from "./LoanComparisonChart";
+import PrepaymentSavings from "./PrepaymentSavings";
 
 function extractText(node: ReactNode): string {
   if (node == null || typeof node === "boolean") return "";
@@ -29,7 +32,7 @@ function H2({ children }: { children?: ReactNode }) {
   return (
     <h2
       id={id}
-      className="group mb-4 mt-12 scroll-mt-24 font-display text-2xl font-bold text-accent md:text-3xl"
+      className="group mb-4 mt-12 scroll-mt-24 font-display text-2xl md:text-3xl font-semibold tracking-tight text-accent"
     >
       {children}
       <HeadingAnchor id={id} />
@@ -213,4 +216,8 @@ export const mdxComponents = {
   tr: TR,
   th: TH,
   td: TD,
+  // Custom block components usable inside .mdx
+  PMTFormulaDiagram,
+  LoanComparisonChart,
+  PrepaymentSavings,
 };

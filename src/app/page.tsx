@@ -142,7 +142,7 @@ export default function Home() {
               <Calculator className="h-3.5 w-3.5" />
               เครื่องมือฟรี — ไม่ต้องสมัครสมาชิก
             </span>
-            <h1 className="thai-heading font-display mt-4 text-3xl font-bold leading-tight text-ink md:text-5xl">
+            <h1 className="thai-heading font-display mt-4 text-3xl sm:text-4xl md:text-5xl font-semibold tracking-tight leading-tight text-ink">
               คำนวณค่างวดผ่อนบ้าน{" "}
               <span className="italic text-accent">ฟรี ใช้งานง่าย</span>
             </h1>
@@ -163,7 +163,7 @@ export default function Home() {
       {/* How to */}
       <section className="container-wrap py-12">
         <div className="mx-auto max-w-2xl text-center">
-          <h2 className="font-display text-2xl font-bold text-ink md:text-3xl">
+          <h2 className="font-display text-2xl md:text-3xl font-semibold tracking-tight text-ink">
             วิธีใช้งาน 3 ขั้นตอน
           </h2>
           <p className="mt-2 text-sm text-ink-soft md:text-base">
@@ -193,7 +193,7 @@ export default function Home() {
         <div className="rounded-3xl border border-line bg-white/70 p-6 md:p-10">
           <div className="grid gap-8 md:grid-cols-2 md:gap-12">
             <div>
-              <h2 className="font-display text-2xl font-bold text-ink md:text-3xl">
+              <h2 className="font-display text-2xl md:text-3xl font-semibold tracking-tight text-ink">
                 สูตรการคำนวณค่างวด
               </h2>
               <p className="mt-3 text-sm leading-relaxed text-ink-soft md:text-base">
@@ -265,7 +265,7 @@ export default function Home() {
       {/* Examples */}
       <section className="container-wrap py-12">
         <div className="mx-auto max-w-2xl text-center">
-          <h2 className="font-display text-2xl font-bold text-ink md:text-3xl">
+          <h2 className="font-display text-2xl md:text-3xl font-semibold tracking-tight text-ink">
             ตัวอย่างการคำนวณ
           </h2>
           <p className="mt-2 text-sm text-ink-soft md:text-base">
@@ -311,7 +311,7 @@ export default function Home() {
       {/* Related tools */}
       <section className="container-wrap py-12">
         <div className="mx-auto max-w-2xl text-center">
-          <h2 className="font-display text-2xl font-bold text-ink md:text-3xl">
+          <h2 className="font-display text-2xl md:text-3xl font-semibold tracking-tight text-ink">
             เครื่องมือเพิ่มเติม
           </h2>
           <p className="mt-2 text-sm text-ink-soft md:text-base">
@@ -346,7 +346,7 @@ export default function Home() {
       {latestPosts.length > 0 && (
         <section className="container-wrap py-12">
           <div className="mx-auto max-w-2xl text-center">
-            <h2 className="font-display text-2xl font-bold text-ink md:text-3xl">
+            <h2 className="font-display text-2xl md:text-3xl font-semibold tracking-tight text-ink">
               บทความล่าสุด
             </h2>
             <p className="mt-2 text-sm text-ink-soft md:text-base">
@@ -392,7 +392,7 @@ export default function Home() {
       <section className="container-wrap py-12">
         <div className="mx-auto max-w-3xl">
           <div className="text-center">
-            <h2 className="font-display text-2xl font-bold text-ink md:text-3xl">
+            <h2 className="font-display text-2xl md:text-3xl font-semibold tracking-tight text-ink">
               คำถามที่พบบ่อย
             </h2>
             <p className="mt-2 text-sm text-ink-soft md:text-base">

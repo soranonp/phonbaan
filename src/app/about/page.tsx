@@ -46,7 +46,7 @@ export default function AboutPage() {
         <p className="mb-3 text-xs font-semibold uppercase tracking-[0.2em] text-accent">
           About PhonBaan
         </p>
-        <h1 className="thai-heading mx-auto max-w-3xl font-display font-bold leading-[1.15] text-ink text-[clamp(26px,6vw,52px)]">
+        <h1 className="thai-heading mx-auto max-w-3xl font-display text-3xl sm:text-4xl md:text-5xl font-semibold tracking-tight leading-tight text-ink">
           เครื่องมือคำนวณผ่อนบ้านที่{" "}
           <em className="text-accent">ใช้ง่าย ฟรี</em>{" "}
           ไม่ต้องสมัครสมาชิก
@@ -60,7 +60,7 @@ export default function AboutPage() {
       {/* Mission */}
       <section className="container-wrap mx-auto max-w-[820px] pb-12">
         <div className="rounded-2xl border border-line bg-white/60 p-6 sm:p-8">
-          <h2 className="mb-4 font-display text-2xl font-bold text-ink">
+          <h2 className="mb-4 font-display text-2xl font-semibold tracking-tight text-ink">
             พันธกิจของเรา
           </h2>
           <p className="leading-relaxed text-ink-soft">
@@ -79,7 +79,7 @@ export default function AboutPage() {
 
       {/* Why us */}
       <section className="container-wrap mx-auto max-w-5xl pb-14">
-        <h2 className="mb-6 text-center font-display text-2xl font-bold text-ink">
+        <h2 className="mb-6 text-center font-display text-2xl font-semibold tracking-tight text-ink">
           ทำไมต้องใช้เว็บนี้
         </h2>
         <div className="grid grid-cols-1 gap-4 min-[480px]:grid-cols-2">
@@ -100,7 +100,7 @@ export default function AboutPage() {
       {/* Formula accuracy */}
       <section className="container-wrap mx-auto max-w-[820px] pb-14">
         <div className="rounded-2xl border border-line bg-white/60 p-6 sm:p-8">
-          <h2 className="mb-4 font-display text-2xl font-bold text-ink">
+          <h2 className="mb-4 font-display text-2xl font-semibold tracking-tight text-ink">
             ความถูกต้องของข้อมูล
           </h2>
           <p className="leading-relaxed text-ink-soft">
@@ -133,7 +133,7 @@ export default function AboutPage() {
       {/* Team */}
       <section className="container-wrap mx-auto max-w-[820px] pb-14">
         <div className="rounded-2xl border border-line bg-white/60 p-6 sm:p-8">
-          <h2 className="mb-4 font-display text-2xl font-bold text-ink">
+          <h2 className="mb-4 font-display text-2xl font-semibold tracking-tight text-ink">
             ใครอยู่เบื้องหลัง PhonBaan
           </h2>
           <p className="leading-relaxed text-ink-soft">
@@ -159,7 +159,7 @@ export default function AboutPage() {
       {/* Disclaimer */}
       <section className="container-wrap mx-auto max-w-[820px] pb-14">
         <div className="rounded-2xl border border-gold-soft/60 bg-gold-soft/30 p-6 sm:p-7">
-          <h2 className="mb-3 font-display text-xl font-bold text-ink">
+          <h2 className="mb-3 font-display text-xl font-semibold tracking-tight text-ink">
             ข้อจำกัดความรับผิดชอบ (Disclaimer)
           </h2>
           <ul className="space-y-2 text-sm leading-relaxed text-ink-soft">
@@ -205,7 +205,7 @@ export default function AboutPage() {
 
       {/* CTA */}
       <section className="container-wrap mx-auto max-w-3xl pb-20 text-center">
-        <h2 className="mb-3 font-display text-2xl font-bold text-ink">
+        <h2 className="mb-3 font-display text-2xl font-semibold tracking-tight text-ink">
           พร้อมคำนวณค่างวดบ้านของคุณแล้วหรือยัง?
         </h2>
         <p className="mb-6 text-ink-soft">

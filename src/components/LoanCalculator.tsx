@@ -20,8 +20,9 @@ import { formatNumber, formatNumberShort, formatTHB } from "@/lib/format";
 import ChartTooltip from "@/components/charts/ChartTooltip";
 import SliderInput from "@/components/SliderInput";
 
-const COLOR_PRINCIPAL = "#00529c"; // primary
-const COLOR_INTEREST = "#ffb81c"; // accent gold
+const COLOR_PRINCIPAL = "#00529c"; // primary — used on bar
+const COLOR_INTEREST = "#ffb81c"; // accent gold — used on bar + tooltip
+const TOOLTIP_PRINCIPAL = "#60a5fa"; // blue-400 — readable on dark tooltip bg
 
 interface YearAggregate {
   year: number;
@@ -194,7 +195,7 @@ export default function LoanCalculator({
                     showTotal
                     totalLabel="รวมจ่ายปีนี้"
                     colorMap={{
-                      เงินต้น: COLOR_PRINCIPAL,
+                      เงินต้น: TOOLTIP_PRINCIPAL,
                       ดอกเบี้ย: COLOR_INTEREST,
                     }}
                   />

@@ -69,7 +69,7 @@ export default function BlogIndexPage() {
         <p className="mb-3 text-xs font-semibold uppercase tracking-[0.2em] text-accent">
           Blog
         </p>
-        <h1 className="thai-heading font-display font-bold leading-[1.15] text-ink text-[clamp(28px,7vw,56px)]">
+        <h1 className="thai-heading font-display text-3xl sm:text-4xl md:text-5xl font-semibold tracking-tight leading-tight text-ink">
           บทความ{" "}
           <em className="text-accent">ผ่อนบ้าน-สินเชื่อบ้าน</em>
         </h1>
@@ -94,7 +94,7 @@ export default function BlogIndexPage() {
               </span>
 
               {/* Title */}
-              <h2 className="mb-3 font-display text-xl font-bold leading-snug text-ink transition-colors group-hover:text-accent">
+              <h2 className="mb-3 font-display text-xl font-semibold tracking-tight leading-snug text-ink transition-colors group-hover:text-accent">
                 {post.title}
               </h2>
 

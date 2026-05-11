@@ -42,7 +42,7 @@ export default function NotFound() {
         >
           404
         </p>
-        <h1 className="mt-4 font-display text-2xl font-bold text-ink md:text-3xl">
+        <h1 className="mt-4 font-display text-2xl md:text-3xl font-semibold tracking-tight text-ink">
           ไม่พบหน้าที่คุณกำลังหา
         </h1>
         <p className="mx-auto mt-3 max-w-md text-ink-soft">

@@ -134,7 +134,7 @@ export default function CalculatorPageLayout({
                 {badge}
               </span>
             )}
-            <h1 className="thai-heading font-display mt-4 text-3xl font-bold leading-tight text-ink md:text-5xl">
+            <h1 className="thai-heading font-display mt-4 text-3xl sm:text-4xl md:text-5xl font-semibold tracking-tight leading-tight text-ink">
               {title}
             </h1>
             <p className="mt-4 text-base text-ink-soft md:text-lg">
@@ -154,7 +154,7 @@ export default function CalculatorPageLayout({
       {relatedTools.length > 0 && (
         <section className="container-wrap py-12">
           <div className="mx-auto max-w-2xl text-center">
-            <h2 className="font-display text-2xl font-bold text-ink md:text-3xl">
+            <h2 className="font-display text-2xl md:text-3xl font-semibold tracking-tight text-ink">
               เครื่องมืออื่นที่เกี่ยวข้อง
             </h2>
             <p className="mt-2 text-sm text-ink-soft md:text-base">
@@ -190,7 +190,7 @@ export default function CalculatorPageLayout({
       <section className="container-wrap py-12">
         <div className="mx-auto max-w-3xl">
           <div className="text-center">
-            <h2 className="font-display text-2xl font-bold text-ink md:text-3xl">
+            <h2 className="font-display text-2xl md:text-3xl font-semibold tracking-tight text-ink">
               คำถามที่พบบ่อย
             </h2>
             <p className="mt-2 text-sm text-ink-soft md:text-base">

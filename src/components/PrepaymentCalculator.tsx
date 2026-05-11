@@ -19,8 +19,9 @@ import { formatNumber, formatNumberShort, formatTHB } from "@/lib/format";
 import ChartTooltip from "@/components/charts/ChartTooltip";
 import SliderInput from "@/components/SliderInput";
 
-const COLOR_BEFORE = "#ffb81c";
-const COLOR_AFTER = "#00529c";
+const COLOR_BEFORE = "#ffb81c"; // gold — used on line + tooltip
+const COLOR_AFTER = "#00529c"; // primary — used on line
+const TOOLTIP_AFTER = "#60a5fa"; // blue-400 — readable on dark tooltip bg
 
 type Mode = "reducePayment" | "reduceTerm";
 
@@ -279,7 +280,7 @@ export default function PrepaymentCalculator() {
                     labelPrefix="ปีที่ "
                     colorMap={{
                       "ก่อนโปะ": COLOR_BEFORE,
-                      "หลังโปะ": COLOR_AFTER,
+                      "หลังโปะ": TOOLTIP_AFTER,
                     }}
                   />
                 }

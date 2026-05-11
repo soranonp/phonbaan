@@ -109,7 +109,7 @@ export default function CookiePolicyPage() {
           <p className="mb-3 text-xs font-semibold uppercase tracking-[0.2em] text-accent">
             Cookie Policy
           </p>
-          <h1 className="thai-heading font-display font-bold text-ink text-[clamp(26px,5.5vw,40px)] leading-[1.2]">
+          <h1 className="thai-heading font-display text-3xl sm:text-4xl font-semibold tracking-tight leading-tight text-ink">
             นโยบายคุกกี้
           </h1>
           <p className="mt-3 text-sm text-ink-soft">
@@ -134,7 +134,7 @@ export default function CookiePolicyPage() {
         </section>
 
         <section>
-          <h2 className="mb-4 font-display text-2xl font-bold text-ink">
+          <h2 className="mb-4 font-display text-2xl font-semibold tracking-tight text-ink">
             คุกกี้คืออะไร?
           </h2>
           <p>
@@ -146,7 +146,7 @@ export default function CookiePolicyPage() {
         </section>
 
         <section>
-          <h2 className="mb-6 font-display text-2xl font-bold text-ink">
+          <h2 className="mb-6 font-display text-2xl font-semibold tracking-tight text-ink">
             ประเภทคุกกี้ที่เราใช้
           </h2>
           <div className="space-y-6">
@@ -198,7 +198,7 @@ export default function CookiePolicyPage() {
         </section>
 
         <section>
-          <h2 className="mb-4 font-display text-2xl font-bold text-ink">
+          <h2 className="mb-4 font-display text-2xl font-semibold tracking-tight text-ink">
             จัดการความยินยอมในเว็บนี้
           </h2>
           <p>
@@ -216,7 +216,7 @@ export default function CookiePolicyPage() {
         </section>
 
         <section>
-          <h2 className="mb-4 font-display text-2xl font-bold text-ink">
+          <h2 className="mb-4 font-display text-2xl font-semibold tracking-tight text-ink">
             วิธีปิดคุกกี้ในเบราว์เซอร์
           </h2>
           <p className="mb-4 text-sm">
@@ -261,7 +261,7 @@ export default function CookiePolicyPage() {
         </section>
 
         <section>
-          <h2 className="mb-4 font-display text-2xl font-bold text-ink">
+          <h2 className="mb-4 font-display text-2xl font-semibold tracking-tight text-ink">
             ติดต่อสอบถามเพิ่มเติม
           </h2>
           <p>

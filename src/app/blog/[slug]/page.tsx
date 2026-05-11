@@ -13,7 +13,7 @@ import {
 import { mdxComponents } from "@/components/blog/MdxComponents";
 import TableOfContents from "@/components/blog/TableOfContents";
 import SocialShare from "@/components/blog/SocialShare";
-import { getHeroComponent } from "@/components/blog/heroes";
+import BlogHero from "@/components/blog/BlogHero";
 
 interface Params {
   slug: string;
@@ -73,7 +73,6 @@ export default async function BlogPostPage({ params }: PageProps) {
 
   const toc = extractToc(post.content);
   const related = getRelatedPosts(slug, 3);
-  const Hero = getHeroComponent(post.heroIllustration);
   const url = postUrl(post.slug);
 
   const articleLd = {
@@ -161,7 +160,7 @@ export default async function BlogPostPage({ params }: PageProps) {
           <span className="inline-flex items-center rounded-full border border-accent/20 bg-white/70 px-3 py-1 text-xs font-medium text-accent">
             {post.tag}
           </span>
-          <h1 className="thai-heading font-display mt-4 text-3xl font-bold leading-tight text-ink md:text-5xl">
+          <h1 className="thai-heading font-display mt-4 text-3xl sm:text-4xl md:text-5xl font-semibold tracking-tight leading-tight text-ink">
             {post.title}
           </h1>
           <p className="mt-4 text-base text-ink-soft md:text-lg">
@@ -178,7 +177,7 @@ export default async function BlogPostPage({ params }: PageProps) {
 
         {/* Hero illustration */}
         <div className="mx-auto mt-8 aspect-[2/1] w-full max-w-4xl overflow-hidden rounded-3xl border border-line shadow-sm">
-          <Hero />
+          <BlogHero variant={post.heroIllustration} />
         </div>
       </article>
 
@@ -224,7 +223,7 @@ export default async function BlogPostPage({ params }: PageProps) {
       {related.length > 0 && (
         <section className="container-wrap pb-20">
           <div className="mx-auto max-w-6xl">
-            <h2 className="font-display text-2xl font-bold text-ink md:text-3xl">
+            <h2 className="font-display text-2xl md:text-3xl font-semibold tracking-tight text-ink">
               บทความที่เกี่ยวข้อง
             </h2>
             <div className="mt-6 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
