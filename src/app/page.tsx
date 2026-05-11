@@ -16,6 +16,7 @@ import {
   calculateTotalInterest,
 } from "@/lib/calculations";
 import { formatNumber } from "@/lib/format";
+import { getAllPosts } from "@/lib/blog";
 
 export const metadata: Metadata = {
   alternates: { canonical: "https://phonbaan.com/" },
@@ -118,6 +119,7 @@ const faqLd = {
 };
 
 export default function Home() {
+  const latestPosts = getAllPosts().slice(0, 3);
   return (
     <>
       <script
@@ -339,6 +341,52 @@ export default function Home() {
           ))}
         </div>
       </section>
+
+      {/* Latest posts */}
+      {latestPosts.length > 0 && (
+        <section className="container-wrap py-12">
+          <div className="mx-auto max-w-2xl text-center">
+            <h2 className="font-display text-2xl font-bold text-ink md:text-3xl">
+              บทความล่าสุด
+            </h2>
+            <p className="mt-2 text-sm text-ink-soft md:text-base">
+              เรื่องน่ารู้เกี่ยวกับการกู้ซื้อบ้าน คอนโด โปะ และรีไฟแนนซ์
+            </p>
+          </div>
+          <div className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            {latestPosts.map((post) => (
+              <Link
+                key={post.slug}
+                href={`/blog/${post.slug}`}
+                className="group flex flex-col rounded-2xl border border-line bg-white/60 p-6 transition-all hover:-translate-y-0.5 hover:border-accent/30 hover:shadow-md"
+              >
+                <span className="mb-3 inline-flex w-fit rounded-full border border-accent/20 bg-accent/5 px-3 py-1 text-xs font-medium text-accent">
+                  {post.tag}
+                </span>
+                <h3 className="mb-3 font-display text-lg font-bold leading-snug text-ink group-hover:text-accent">
+                  {post.title}
+                </h3>
+                <p className="mb-4 line-clamp-3 flex-1 text-sm leading-relaxed text-ink-soft">
+                  {post.excerpt}
+                </p>
+                <div className="flex items-center gap-2 text-xs text-ink-soft">
+                  <span>{post.formattedDate}</span>
+                  <span className="text-line">•</span>
+                  <span>อ่าน {post.readingMinutes} นาที</span>
+                </div>
+              </Link>
+            ))}
+          </div>
+          <div className="mt-8 text-center">
+            <Link
+              href="/blog"
+              className="inline-flex items-center gap-2 rounded-lg border border-accent/30 bg-white px-5 py-2.5 text-sm font-medium text-accent transition-colors hover:bg-accent/5"
+            >
+              ดูบทความทั้งหมด →
+            </Link>
+          </div>
+        </section>
+      )}
 
       {/* FAQ */}
       <section className="container-wrap py-12">
