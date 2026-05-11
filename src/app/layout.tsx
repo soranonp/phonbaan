@@ -41,12 +41,11 @@ const jetBrainsMono = JetBrains_Mono({
 export const metadata: Metadata = {
   metadataBase: new URL("https://phonbaan.com"),
   title: {
-    default:
-      "โปรแกรมคำนวณค่างวดผ่อนบ้าน คำนวณดอกเบี้ยและตารางผ่อน | PhonBaan",
+    default: "คำนวณค่างวดผ่อนบ้าน ฟรี | PhonBaan",
     template: "%s | PhonBaan",
   },
   description:
-    "คำนวณค่างวดผ่อนบ้านออนไลน์ฟรี รู้ค่างวดต่อเดือน ดอกเบี้ยรวม และตารางผ่อนรายปี พร้อมเครื่องมือคำนวณโปะบ้าน รีไฟแนนซ์ และวงเงินกู้",
+    "เครื่องคำนวณค่างวดผ่อนบ้านออนไลน์ฟรี ใส่ยอดกู้ ดอกเบี้ย และระยะเวลา รู้ค่างวดต่อเดือน ดอกเบี้ยรวม และตารางผ่อนทุกงวด พร้อมเครื่องมือโปะบ้าน รีไฟแนนซ์ และวงเงินกู้",
   manifest: "/site.webmanifest",
   icons: {
     icon: [
@@ -81,7 +80,7 @@ export const metadata: Metadata = {
     images: ["/twitter-image.png"],
   },
   alternates: {
-    canonical: "https://phonbaan.com",
+    canonical: "https://phonbaan.com/",
   },
 };
 
