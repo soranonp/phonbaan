@@ -1,9 +1,9 @@
 "use client";
 
-import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState, useRef, useEffect } from "react";
+import PhonBaanLogo from "@/components/PhonBaanLogo";
 
 const calculatorLinks = [
   { href: "/", label: "คำนวณผ่อนบ้าน" },
@@ -68,13 +68,9 @@ export default function SiteHeader() {
           className="flex shrink-0 items-center rounded-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2"
           aria-label="PhonBaan — หน้าแรก"
         >
-          <Image
-            src="/logo.svg"
-            alt="PhonBaan"
-            width={140}
-            height={40}
-            priority
-            className="h-9 w-auto"
+          <PhonBaanLogo
+            markClassName="h-8 w-8 sm:h-10 sm:w-10"
+            textClassName="text-lg sm:text-xl"
           />
         </Link>
 

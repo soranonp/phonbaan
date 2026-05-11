@@ -1,7 +1,7 @@
-import Image from "next/image";
 import Link from "next/link";
 import { getAllPosts } from "@/lib/blog";
 import CookieSettingsButton from "./CookieSettingsButton";
+import PhonBaanLogo from "./PhonBaanLogo";
 
 const toolLinks = [
   { href: "/", label: "คำนวณผ่อนบ้าน" },
@@ -70,12 +70,10 @@ export default function SiteFooter() {
         {/* Brand */}
         <div>
           <div className="mb-3">
-            <Image
-              src="/logo-white.svg"
-              alt="PhonBaan"
-              width={140}
-              height={40}
-              className="h-9 w-auto"
+            <PhonBaanLogo
+              markClassName="h-9 w-9"
+              textClassName="text-xl"
+              variant="white"
             />
           </div>
           <p className="text-sm leading-relaxed">

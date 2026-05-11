@@ -59,7 +59,7 @@ function ogTemplate({ width, height, title, subtitle, domain }) {
   const subSize = Math.round(height * 0.045);
   const domainSize = Math.round(height * 0.035);
 
-  // ช-inspired mark + bars, scaled to markSize. ViewBox is 64x64 for the mark.
+  // House mark scaled to markSize. ViewBox is 64x64.
   const scale = markSize / 64;
   return `<svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="${height}" viewBox="0 0 ${width} ${height}">
   <defs>
@@ -74,28 +74,25 @@ function ogTemplate({ width, height, title, subtitle, domain }) {
   </defs>
   <rect width="${width}" height="${height}" fill="url(#bg)"/>
   <rect width="${width}" height="${height}" fill="url(#glow)"/>
-  <!-- gold accent line at bottom -->
   <rect x="0" y="${height - 8}" width="${width}" height="8" fill="#ffb81c"/>
 
-  <!-- Mark -->
+  <!-- House mark -->
   <g transform="translate(${markX} ${markY}) scale(${scale})">
     <rect width="64" height="64" rx="14" fill="#00529c"/>
-    <g fill="none" stroke="#ffffff" stroke-width="3.5" stroke-linecap="round">
-      <circle cx="18" cy="18" r="6"/>
-      <path d="M18 24 L18 42 Q18 48 24 48"/>
+    <g fill="none" stroke="#ffffff" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M12 32 L32 14 L52 32"/>
+      <path d="M18 30 L18 52 L46 52 L46 30"/>
     </g>
-    <rect x="32" y="40" width="6" height="14" rx="1.5" fill="#ffb81c"/>
-    <rect x="42" y="30" width="6" height="24" rx="1.5" fill="#ffe0a3"/>
-    <rect x="52" y="20" width="6" height="34" rx="1.5" fill="#ffffff"/>
+    <rect x="28" y="38" width="8" height="14" rx="1.5" fill="#ffb81c"/>
   </g>
 
   <!-- Title -->
-  <text x="${textX}" y="${titleY}" font-family="'Fraunces','Sukhumvit Set','Thonburi','Times New Roman',serif" font-size="${titleSize}" font-weight="700" font-style="italic" fill="#00529c">${title}</text>
+  <text x="${textX}" y="${titleY}" font-family="'IBM Plex Sans Thai','Sukhumvit Set','Thonburi','Helvetica Neue','Arial',sans-serif" font-size="${titleSize}" font-weight="700" fill="#00529c">${title}</text>
   <!-- Subtitle -->
   <text x="${textX}" y="${subY}" font-family="'IBM Plex Sans Thai','Sukhumvit Set','Thonburi',sans-serif" font-size="${subSize}" font-weight="500" fill="#36475c">${subtitle}</text>
 
   <!-- Domain bottom right -->
-  <text x="${width - Math.round(width * 0.04)}" y="${height - Math.round(height * 0.06)}" text-anchor="end" font-family="'Fraunces','Times New Roman',serif" font-size="${domainSize}" font-weight="600" font-style="italic" fill="#ffb81c">${domain}</text>
+  <text x="${width - Math.round(width * 0.04)}" y="${height - Math.round(height * 0.06)}" text-anchor="end" font-family="'IBM Plex Sans Thai','Helvetica Neue','Arial',sans-serif" font-size="${domainSize}" font-weight="700" fill="#ffb81c">${domain}</text>
 </svg>`;
 }
 
