@@ -18,69 +18,10 @@ import {
 } from "@/lib/calculations";
 import { formatNumber, formatNumberShort, formatTHB } from "@/lib/format";
 import ChartTooltip from "@/components/charts/ChartTooltip";
+import SliderInput from "@/components/SliderInput";
 
 const COLOR_PRINCIPAL = "#00529c"; // primary
 const COLOR_INTEREST = "#ffb81c"; // accent gold
-
-interface SliderInputProps {
-  label: string;
-  unit: string;
-  value: number;
-  onChange: (n: number) => void;
-  min: number;
-  max: number;
-  step: number;
-  format?: (n: number) => string;
-}
-
-const SliderInput = ({
-  label,
-  unit,
-  value,
-  onChange,
-  min,
-  max,
-  step,
-  format = formatNumber,
-}: SliderInputProps) => {
-  const handleNumber = (raw: string) => {
-    const n = Number(raw.replace(/[^\d.-]/g, ""));
-    if (!Number.isFinite(n)) return;
-    onChange(Math.min(max, Math.max(min, n)));
-  };
-  return (
-    <div className="space-y-2">
-      <div className="flex items-baseline justify-between gap-3">
-        <label className="text-sm font-medium text-ink">{label}</label>
-        <div className="flex items-center gap-2">
-          <input
-            type="text"
-            inputMode="decimal"
-            value={format(value)}
-            onChange={(e) => handleNumber(e.target.value)}
-            className="w-32 rounded-lg border border-line bg-white px-3 py-1.5 text-right text-sm font-mono text-ink focus:border-accent focus:outline-none"
-            aria-label={label}
-          />
-          <span className="text-xs text-ink-soft">{unit}</span>
-        </div>
-      </div>
-      <input
-        type="range"
-        min={min}
-        max={max}
-        step={step}
-        value={value}
-        onChange={(e) => onChange(Number(e.target.value))}
-        className="w-full accent-[color:var(--color-accent)]"
-        aria-label={`${label} (slider)`}
-      />
-      <div className="flex justify-between text-[11px] text-ink-soft/70">
-        <span>{format(min)}</span>
-        <span>{format(max)}</span>
-      </div>
-    </div>
-  );
-};
 
 interface YearAggregate {
   year: number;
@@ -102,10 +43,20 @@ const aggregateByYear = (
   return Array.from(map.values()).sort((a, b) => a.year - b.year);
 };
 
-export default function LoanCalculator() {
-  const [loanAmount, setLoanAmount] = useState(3_000_000);
-  const [annualRate, setAnnualRate] = useState(3.5);
-  const [years, setYears] = useState(30);
+interface LoanCalculatorProps {
+  initialLoan?: number;
+  initialRate?: number;
+  initialYears?: number;
+}
+
+export default function LoanCalculator({
+  initialLoan = 3_000_000,
+  initialRate = 3.5,
+  initialYears = 30,
+}: LoanCalculatorProps = {}) {
+  const [loanAmount, setLoanAmount] = useState(initialLoan);
+  const [annualRate, setAnnualRate] = useState(initialRate);
+  const [years, setYears] = useState(initialYears);
   const [showAll, setShowAll] = useState(false);
 
   const monthlyPayment = useMemo(
