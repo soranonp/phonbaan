@@ -133,10 +133,10 @@ export default function CookieBanner() {
             <p className="mb-4 text-sm leading-relaxed text-ink-soft">
               เว็บไซต์นี้ใช้คุกกี้เพื่อวิเคราะห์การใช้งานและปรับปรุงประสบการณ์ของคุณ{" "}
               <Link
-                href="/privacy"
+                href="/cookie-policy"
                 className="text-accent underline underline-offset-2 hover:text-accent-bright"
               >
-                อ่านนโยบายของเรา
+                อ่านนโยบายคุกกี้
               </Link>
             </p>
             <div className="flex flex-col gap-2 sm:flex-row">

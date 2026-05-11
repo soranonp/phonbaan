@@ -17,7 +17,10 @@ const navLinks = [
   { href: "/contact", label: "ติดต่อ" },
 ];
 
-const policyLinks = [{ href: "/privacy", label: "นโยบายความเป็นส่วนตัว" }];
+const policyLinks = [
+  { href: "/privacy-policy", label: "นโยบายความเป็นส่วนตัว" },
+  { href: "/cookie-policy", label: "นโยบายคุกกี้" },
+];
 
 const socials = [
   {

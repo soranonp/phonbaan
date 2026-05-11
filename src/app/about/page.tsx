@@ -97,6 +97,65 @@ export default function AboutPage() {
         </div>
       </section>
 
+      {/* Formula accuracy */}
+      <section className="container-wrap mx-auto max-w-[820px] pb-14">
+        <div className="rounded-2xl border border-line bg-white/60 p-6 sm:p-8">
+          <h2 className="mb-4 font-display text-2xl font-bold text-ink">
+            ความถูกต้องของข้อมูล
+          </h2>
+          <p className="leading-relaxed text-ink-soft">
+            เครื่องคำนวณของเราใช้สูตร{" "}
+            <strong className="text-ink">PMT (Payment Formula)</strong>{" "}
+            ซึ่งเป็นสูตรมาตรฐานเดียวกับที่{" "}
+            ธนาคารพาณิชย์ทุกแห่งใช้คำนวณค่างวดสินเชื่อบ้าน
+            ทำให้ผลลัพธ์ตรงกับใบเสนอราคาของธนาคารหากใส่ข้อมูลตรงกัน
+          </p>
+          <div className="mt-4 rounded-xl bg-bg p-4 font-mono text-sm text-ink md:text-base">
+            M = P × [r(1+r)<sup>n</sup>] ÷ [(1+r)<sup>n</sup> − 1]
+          </div>
+          <p className="mt-4 leading-relaxed text-ink-soft">
+            ผลลัพธ์อาจต่างจากตัวเลขจริงของธนาคารเล็กน้อย (หลักสิบบาท) เนื่องจาก:
+          </p>
+          <ul className="mt-3 ml-5 list-disc space-y-1.5 text-sm leading-relaxed text-ink-soft">
+            <li>การปัดเศษทศนิยมตอนแสดงผลของแต่ละธนาคารต่างกัน</li>
+            <li>วันที่ตัดรอบของแต่ละธนาคารต่างกัน</li>
+            <li>ดอกเบี้ยลอยตัวที่จะเปลี่ยนตามที่ธนาคารประกาศในแต่ละช่วง</li>
+            <li>ค่าธรรมเนียมและประกันต่างๆ ที่บางธนาคารบวกเข้าค่างวด</li>
+          </ul>
+          <p className="mt-4 leading-relaxed text-ink-soft">
+            สำหรับ DSR (Debt Service Ratio) เราอ้างอิงเกณฑ์ 40% สำหรับพนักงานประจำ
+            35% สำหรับฟรีแลนซ์ และ 30% สำหรับเจ้าของกิจการ
+            ซึ่งเป็นมาตรฐานทั่วไปของธนาคารพาณิชย์ในไทย
+          </p>
+        </div>
+      </section>
+
+      {/* Team */}
+      <section className="container-wrap mx-auto max-w-[820px] pb-14">
+        <div className="rounded-2xl border border-line bg-white/60 p-6 sm:p-8">
+          <h2 className="mb-4 font-display text-2xl font-bold text-ink">
+            ใครอยู่เบื้องหลัง PhonBaan
+          </h2>
+          <p className="leading-relaxed text-ink-soft">
+            PhonBaan ดูแลโดย{" "}
+            <strong className="text-ink">ทีม PhonBaan</strong> —
+            กลุ่มคนทำเว็บที่สนใจเรื่องการเงินส่วนบุคคล มีพื้นฐานทั้งด้านการเขียนซอฟต์แวร์
+            และประสบการณ์การกู้บ้าน-รีไฟแนนซ์-โปะบ้านจริง
+          </p>
+          <p className="mt-3 leading-relaxed text-ink-soft">
+            เราไม่ใช่นายหน้า ไม่ขายสินเชื่อ ไม่รับค่าคอมมิชชั่นจากธนาคาร —
+            จึงสามารถนำเสนอข้อมูลที่ตรงไปตรงมาและเป็นกลาง
+            หากท่านมีข้อเสนอแนะหรือพบความผิดพลาด{" "}
+            <a
+              href="/contact"
+              className="text-accent underline decoration-accent/30 underline-offset-2 hover:text-accent-bright"
+            >
+              ติดต่อเราได้ทันที
+            </a>
+          </p>
+        </div>
+      </section>
+
       {/* Disclaimer */}
       <section className="container-wrap mx-auto max-w-[820px] pb-14">
         <div className="rounded-2xl border border-gold-soft/60 bg-gold-soft/30 p-6 sm:p-7">

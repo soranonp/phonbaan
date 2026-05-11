@@ -1,15 +1,14 @@
 import type { Metadata } from "next";
-import ContactForm from "@/components/ContactForm";
 import AccordionFAQ from "@/components/AccordionFAQ";
 
 export const metadata: Metadata = {
   title: "ติดต่อเรา | PhonBaan",
   description:
-    "มีคำถาม ข้อเสนอแนะ หรืออยากให้เพิ่มเครื่องมือ? ติดต่อทีม PhonBaan ได้ผ่านฟอร์ม อีเมล Facebook หรือ Line",
+    "มีคำถาม ข้อเสนอแนะ หรืออยากให้เพิ่มเครื่องมือ? ติดต่อทีม PhonBaan ผ่านอีเมล Facebook หรือ Line — เราตอบกลับภายใน 24-48 ชั่วโมง",
   alternates: { canonical: "https://phonbaan.com/contact" },
   openGraph: {
     title: "ติดต่อเรา | PhonBaan",
-    description: "มีคำถาม ข้อเสนอแนะ หรืออยากให้เพิ่มเครื่องมือ?",
+    description: "ติดต่อทีม PhonBaan ผ่านอีเมล Facebook หรือ Line",
     url: "https://phonbaan.com/contact",
     locale: "th_TH",
     type: "website",
@@ -22,7 +21,12 @@ const channels = [
     value: "hello@phonbaan.com",
     href: "mailto:hello@phonbaan.com",
     icon: (
-      <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+      <svg
+        className="h-5 w-5"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke="currentColor"
+      >
         <path
           strokeLinecap="round"
           strokeLinejoin="round"
@@ -54,14 +58,33 @@ const channels = [
   },
 ];
 
+const topics = [
+  {
+    title: "พบบั๊กหรือผลคำนวณผิด",
+    desc: "หากเครื่องคำนวณให้ผลที่ไม่ตรงกับใบเสนอราคาธนาคารอย่างมีนัยสำคัญ แจ้งเราพร้อมตัวเลข input ที่ใช้ — เราจะตรวจสอบและแก้ไข",
+  },
+  {
+    title: "เสนอเครื่องมือใหม่",
+    desc: "อยากให้เพิ่มเครื่องคำนวณอะไร? เช่น คำนวณภาษีโรงเรือน, คำนวณค่าธรรมเนียมโอน, คำนวณดอกเบี้ยบัตรเครดิต — บอกเราได้",
+  },
+  {
+    title: "Guest Post / Content Collaboration",
+    desc: "เขียนบทความเกี่ยวกับการกู้ซื้อบ้าน คอนโด การเงินส่วนบุคคล ส่งหัวข้อและตัวอย่างผลงานมา เราคัดเลือกเนื้อหาที่อ้างอิงข้อมูลจริง ไม่ใช่บทความขาย",
+  },
+  {
+    title: "PDPA / ขอลบข้อมูล",
+    desc: "ใช้สิทธิ์ตาม พ.ร.บ.คุ้มครองข้อมูลส่วนบุคคล (PDPA) ขอเข้าถึง / แก้ไข / ลบ / ถอนความยินยอม — ส่งเรื่องมาที่อีเมล เราดำเนินการภายใน 30 วัน",
+  },
+];
+
 const faqs = [
   {
     q: "รับเขียน Guest Post หรือเปล่า?",
-    a: "รับครับ — กรุณาส่งหัวข้อและตัวอย่างผลงานมาที่ฟอร์มหรืออีเมล\nเราตอบรับเฉพาะเนื้อหาที่เกี่ยวกับการกู้ซื้อบ้าน/คอนโด การวางแผนการเงิน อ้างอิงข้อมูลจริง และไม่ใช่บทความขาย",
+    a: "รับครับ — กรุณาส่งหัวข้อและตัวอย่างผลงานมาที่ hello@phonbaan.com\nเราตอบรับเฉพาะเนื้อหาที่เกี่ยวกับการกู้ซื้อบ้าน/คอนโด การวางแผนการเงิน อ้างอิงข้อมูลจริง และไม่ใช่บทความขาย",
   },
   {
     q: "อยากลงโฆษณาบนเว็บได้ไหม?",
-    a: "ปัจจุบันเว็บอยู่ระหว่างเตรียมเปิดให้ลงโฆษณาผ่าน Google AdSense\nสำหรับโฆษณาตรง (Direct ads) สามารถส่งรายละเอียดมาได้ที่ฟอร์ม",
+    a: "ปัจจุบันเว็บอยู่ระหว่างเตรียมเปิดให้ลงโฆษณาผ่าน Google AdSense\nสำหรับโฆษณาตรง (Direct ads) สามารถส่งรายละเอียดมาที่อีเมลได้",
   },
   {
     q: "ตอบกลับนานแค่ไหน?",
@@ -87,56 +110,68 @@ export default function ContactPage() {
         </h1>
         <p className="mx-auto mt-4 max-w-2xl text-base leading-relaxed text-ink-soft">
           เราตอบกลับทุกข้อความ — เลือกช่องทางที่สะดวกได้เลย
+          โดยเฉลี่ยตอบภายใน 24-48 ชั่วโมง
         </p>
       </section>
 
-      {/* Two-col */}
-      <section className="container-wrap mx-auto max-w-5xl pb-14">
-        <div className="grid grid-cols-1 gap-8 md:grid-cols-5">
-          {/* Form */}
-          <div className="md:col-span-3">
-            <h2 className="mb-4 font-display text-xl font-bold text-ink">
-              ส่งข้อความถึงเรา
-            </h2>
-            <ContactForm />
-          </div>
+      {/* Channels */}
+      <section className="container-wrap mx-auto max-w-3xl pb-12">
+        <div className="grid gap-3 sm:grid-cols-3">
+          {channels.map((c) => (
+            <a
+              key={c.label}
+              href={c.href}
+              target={c.href.startsWith("http") ? "_blank" : undefined}
+              rel={c.href.startsWith("http") ? "noopener noreferrer" : undefined}
+              className="flex items-center gap-3 rounded-2xl border border-line bg-white/70 p-4 transition-all hover:-translate-y-0.5 hover:border-accent/40 hover:shadow-md"
+            >
+              <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-accent/10 text-accent">
+                {c.icon}
+              </span>
+              <div className="min-w-0">
+                <p className="text-[11px] uppercase tracking-wider text-ink-soft">
+                  {c.label}
+                </p>
+                <p className="truncate text-sm font-medium text-ink">
+                  {c.value}
+                </p>
+              </div>
+            </a>
+          ))}
+        </div>
+      </section>
 
-          {/* Channels */}
-          <div className="md:col-span-2">
-            <h2 className="mb-4 font-display text-xl font-bold text-ink">
-              ช่องทางอื่น
-            </h2>
-            <div className="space-y-3">
-              {channels.map((c) => (
-                <a
-                  key={c.label}
-                  href={c.href}
-                  target={c.href.startsWith("http") ? "_blank" : undefined}
-                  rel={c.href.startsWith("http") ? "noopener noreferrer" : undefined}
-                  className="flex items-center gap-3 rounded-xl border border-line bg-white/60 p-4 transition-colors hover:border-accent/30"
-                >
-                  <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-accent/10 text-accent">
-                    {c.icon}
-                  </span>
-                  <div className="min-w-0">
-                    <p className="text-xs uppercase tracking-wider text-ink-soft">
-                      {c.label}
-                    </p>
-                    <p className="truncate text-sm font-medium text-ink">
-                      {c.value}
-                    </p>
-                  </div>
-                </a>
-              ))}
+      {/* Topics */}
+      <section className="container-wrap mx-auto max-w-4xl pb-14">
+        <h2 className="mb-6 text-center font-display text-2xl font-bold text-ink">
+          ติดต่อเรื่องอะไรได้บ้าง
+        </h2>
+        <div className="grid gap-4 sm:grid-cols-2">
+          {topics.map((t) => (
+            <div
+              key={t.title}
+              className="rounded-2xl border border-line bg-white/60 p-5"
+            >
+              <h3 className="mb-2 font-display text-base font-semibold text-ink">
+                {t.title}
+              </h3>
+              <p className="text-sm leading-relaxed text-ink-soft">{t.desc}</p>
             </div>
-            <div className="mt-4 rounded-xl border border-gold-soft/60 bg-gold-soft/20 p-4">
-              <p className="text-sm leading-relaxed text-ink-soft">
-                <strong className="text-ink">เวลาตอบกลับ</strong>
-                <br />
-                เราตอบกลับภายใน 24-48 ชั่วโมง ในวันทำการ
-              </p>
-            </div>
-          </div>
+          ))}
+        </div>
+      </section>
+
+      {/* Privacy reminder */}
+      <section className="container-wrap mx-auto max-w-3xl pb-12">
+        <div className="rounded-2xl border border-gold-soft/60 bg-gold-soft/20 p-5 text-sm leading-relaxed text-ink-soft">
+          <strong className="text-ink">หมายเหตุเรื่องข้อมูล:</strong>{" "}
+          อีเมลและข้อความที่ส่งมาจะถูกเก็บไว้ใช้สำหรับการตอบกลับเท่านั้น — ดูรายละเอียดที่{" "}
+          <a
+            href="/privacy-policy"
+            className="text-accent underline decoration-accent/30 underline-offset-2 hover:text-accent-bright"
+          >
+            นโยบายความเป็นส่วนตัว
+          </a>
         </div>
       </section>
 

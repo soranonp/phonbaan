@@ -6,12 +6,12 @@ export const metadata: Metadata = {
   title: "นโยบายความเป็นส่วนตัว | PhonBaan",
   description:
     "นโยบายความเป็นส่วนตัวของ phonbaan.com — เราเคารพและคุ้มครองข้อมูลส่วนบุคคลของผู้ใช้ตาม พ.ร.บ.คุ้มครองข้อมูลส่วนบุคคล พ.ศ. 2562 (PDPA)",
-  alternates: { canonical: "https://phonbaan.com/privacy" },
+  alternates: { canonical: "https://phonbaan.com/privacy-policy" },
   openGraph: {
     title: "นโยบายความเป็นส่วนตัว | PhonBaan",
     description:
       "นโยบายความเป็นส่วนตัว phonbaan.com ตาม พ.ร.บ.คุ้มครองข้อมูลส่วนบุคคล พ.ศ. 2562 (PDPA)",
-    url: "https://phonbaan.com/privacy",
+    url: "https://phonbaan.com/privacy-policy",
     locale: "th_TH",
     type: "article",
   },
@@ -28,7 +28,7 @@ const sections = [
   { id: "changes", title: "8. การเปลี่ยนแปลงนโยบาย" },
 ];
 
-export default function PrivacyPage() {
+export default function PrivacyPolicyPage() {
   return (
     <div className="bg-bg">
       {/* Hero */}
@@ -41,7 +41,7 @@ export default function PrivacyPage() {
             นโยบายความเป็นส่วนตัว
           </h1>
           <p className="mt-3 text-sm text-ink-soft">
-            อัปเดตล่าสุด: 10 พฤษภาคม 2026
+            วันที่บังคับใช้: 11 พฤษภาคม 2026
           </p>
         </div>
       </section>
@@ -85,17 +85,22 @@ export default function PrivacyPage() {
               1. ข้อมูลที่เราเก็บรวบรวม
             </h2>
             <h3 className="mb-2 mt-4 font-display text-base font-semibold text-ink">
-              1.1 ข้อมูลที่ผู้ใช้กรอก
+              1.1 ข้อมูลที่ผู้ใช้กรอกในเครื่องคำนวณ
             </h3>
             <p>
-              ตัวเลขที่ท่านกรอกในเครื่องคำนวณ (เงินต้น อัตราดอกเบี้ย ระยะเวลา ฯลฯ)
-              จะถูก<strong>ประมวลผลภายในเบราว์เซอร์ของท่านเท่านั้น</strong>{" "}
+              ตัวเลขที่ท่านกรอกในเครื่องคำนวณ (เงินต้น อัตราดอกเบี้ย ระยะเวลา ฯลฯ){" "}
+              <strong>
+                ประมวลผลภายในเบราว์เซอร์ของท่านเท่านั้น (client-side)
+              </strong>{" "}
               เราไม่ส่งข้อมูลเหล่านี้กลับไปยังเซิร์ฟเวอร์ของเรา
               และไม่มีการจัดเก็บถาวรใด ๆ
             </p>
             <p className="mt-2">
-              หากท่านส่งข้อความผ่านแบบฟอร์มในหน้า{" "}
-              <Link href="/contact" className="text-accent hover:text-accent-bright">
+              หากท่านส่งข้อความผ่านอีเมลในหน้า{" "}
+              <Link
+                href="/contact"
+                className="text-accent hover:text-accent-bright"
+              >
                 ติดต่อเรา
               </Link>{" "}
               เราจะเก็บ ชื่อ อีเมล และเนื้อหาข้อความ
@@ -109,7 +114,9 @@ export default function PrivacyPage() {
               <li>คุกกี้ (Cookies) และ Local Storage</li>
               <li>หมายเลข IP (IP address)</li>
               <li>ข้อมูลเบราว์เซอร์และอุปกรณ์ (User Agent)</li>
-              <li>ข้อมูลการใช้งานผ่าน Google Analytics 4 (GA4)</li>
+              <li>
+                ข้อมูลการใช้งานผ่าน Google Analytics 4 (GA4) เมื่อท่านยินยอม
+              </li>
             </ul>
           </section>
 
@@ -130,23 +137,37 @@ export default function PrivacyPage() {
             <h2 className="mb-3 font-display text-xl font-bold text-ink">
               3. การใช้คุกกี้
             </h2>
-            <p>เราใช้คุกกี้ 3 ประเภท</p>
+            <p>
+              เราใช้คุกกี้ 3 ประเภท — รายละเอียดเพิ่มเติมดูที่{" "}
+              <Link
+                href="/cookie-policy"
+                className="text-accent hover:text-accent-bright"
+              >
+                นโยบายคุกกี้
+              </Link>
+            </p>
             <div className="mt-3 space-y-3">
               <div className="rounded-xl border border-line bg-white/60 p-4">
-                <p className="mb-1 font-semibold text-ink">คุกกี้ที่จำเป็น</p>
+                <p className="mb-1 font-semibold text-ink">
+                  คุกกี้ที่จำเป็น (Strictly Necessary)
+                </p>
                 <p className="text-sm">
                   ใช้จดจำการตั้งค่าคุกกี้ของท่าน — ไม่สามารถปิดใช้งานได้
                 </p>
               </div>
               <div className="rounded-xl border border-line bg-white/60 p-4">
-                <p className="mb-1 font-semibold text-ink">คุกกี้วิเคราะห์</p>
+                <p className="mb-1 font-semibold text-ink">
+                  คุกกี้วิเคราะห์ (Analytics)
+                </p>
                 <p className="text-sm">
                   Google Analytics 4 — เก็บข้อมูลการใช้งานแบบไม่ระบุตัวตน
                   เพื่อปรับปรุงเว็บไซต์
                 </p>
               </div>
               <div className="rounded-xl border border-line bg-white/60 p-4">
-                <p className="mb-1 font-semibold text-ink">คุกกี้โฆษณา</p>
+                <p className="mb-1 font-semibold text-ink">
+                  คุกกี้โฆษณา (Marketing)
+                </p>
                 <p className="text-sm">
                   สำหรับ Google AdSense ในอนาคต — แสดงโฆษณาที่เกี่ยวข้องกับท่าน
                 </p>
@@ -154,7 +175,8 @@ export default function PrivacyPage() {
             </div>
             <p className="mt-4">
               ท่านสามารถยกเลิกหรือเปลี่ยนความยินยอมได้ตลอดเวลา
-              โดยกดปุ่มด้านล่างหรือลิงก์ &ldquo;ตั้งค่าคุกกี้&rdquo; ในส่วนท้ายของเว็บไซต์
+              โดยกดปุ่มด้านล่างหรือลิงก์ &ldquo;ตั้งค่าคุกกี้&rdquo;
+              ในส่วนท้ายของเว็บไซต์
             </p>
             <div className="mt-4">
               <CookieSettingsButton className="rounded-lg bg-accent px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-accent-bright">
@@ -169,17 +191,18 @@ export default function PrivacyPage() {
             </h2>
             <p>
               เราใช้บริการของผู้ให้บริการบุคคลที่สามเฉพาะเพื่อให้บริการเว็บไซต์เท่านั้น
-              และไม่ขายข้อมูลของท่านให้ใคร
+              และ<strong>ไม่ขายข้อมูล</strong>ของท่านให้ใคร
             </p>
             <ul className="ml-5 mt-3 list-disc space-y-1">
               <li>
                 <strong>Google Analytics</strong> — วิเคราะห์การใช้งานเว็บไซต์
+                (ส่งข้อมูลแบบไม่ระบุตัวตนไปยัง Google LLC สหรัฐอเมริกา)
               </li>
               <li>
                 <strong>Google AdSense</strong> — แสดงโฆษณา (เมื่อเปิดให้บริการ)
               </li>
               <li>
-                <strong>Cloudflare</strong> — โครงสร้างพื้นฐานและความปลอดภัย
+                <strong>Cloudflare</strong> — โครงสร้างพื้นฐาน CDN และความปลอดภัย
               </li>
             </ul>
           </section>
@@ -194,10 +217,14 @@ export default function PrivacyPage() {
               <li>สิทธิเข้าถึงข้อมูลส่วนบุคคล (Right of access)</li>
               <li>สิทธิคัดค้านการเก็บรวบรวม ใช้ หรือเปิดเผย (Right to object)</li>
               <li>สิทธิขอให้ลบหรือทำลายข้อมูล (Right to erasure)</li>
-              <li>สิทธิขอให้ระงับการใช้ข้อมูล (Right to restrict processing)</li>
+              <li>
+                สิทธิขอให้ระงับการใช้ข้อมูล (Right to restrict processing)
+              </li>
               <li>สิทธิให้โอนย้ายข้อมูล (Right to data portability)</li>
               <li>สิทธิขอให้แก้ไขข้อมูล (Right to rectification)</li>
-              <li>สิทธิร้องเรียนต่อคณะกรรมการคุ้มครองข้อมูลส่วนบุคคล</li>
+              <li>
+                สิทธิร้องเรียนต่อคณะกรรมการคุ้มครองข้อมูลส่วนบุคคล (PDPC)
+              </li>
             </ol>
             <p className="mt-3">
               ท่านสามารถใช้สิทธิเหล่านี้ได้โดยติดต่อมาที่{" "}
@@ -206,7 +233,8 @@ export default function PrivacyPage() {
                 className="text-accent hover:text-accent-bright"
               >
                 hello@phonbaan.com
-              </a>
+              </a>{" "}
+              — เราจะดำเนินการภายใน 30 วันนับจากวันที่ได้รับคำขอ
             </p>
           </section>
 
@@ -218,7 +246,7 @@ export default function PrivacyPage() {
               <li>ข้อมูลความยินยอมคุกกี้: 12 เดือน</li>
               <li>ข้อมูล Google Analytics: 14 เดือน (ตามค่าเริ่มต้น GA4)</li>
               <li>
-                อีเมลที่ส่งผ่านแบบฟอร์มติดต่อ: 24 เดือน หรือจนกว่าท่านขอให้ลบ
+                อีเมลจากการติดต่อผ่านหน้า contact: 24 เดือน หรือจนกว่าท่านขอให้ลบ
               </li>
             </ul>
           </section>
@@ -229,7 +257,9 @@ export default function PrivacyPage() {
             </h2>
             <div className="rounded-xl border border-line bg-white/60 p-5">
               <p className="mb-2">
-                <strong className="text-ink">เจ้าหน้าที่คุ้มครองข้อมูลส่วนบุคคล</strong>
+                <strong className="text-ink">
+                  เจ้าหน้าที่คุ้มครองข้อมูลส่วนบุคคล (Data Protection Officer)
+                </strong>
                 <br />
                 phonbaan.com
               </p>
@@ -242,6 +272,18 @@ export default function PrivacyPage() {
                   hello@phonbaan.com
                 </a>
               </p>
+              <p className="mt-2 text-sm">
+                หรือสามารถร้องเรียนได้ที่ สำนักงานคณะกรรมการคุ้มครองข้อมูลส่วนบุคคล
+                (สคส.) ผ่านเว็บไซต์{" "}
+                <a
+                  href="https://www.pdpc.or.th"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-accent hover:text-accent-bright"
+                >
+                  pdpc.or.th
+                </a>
+              </p>
             </div>
           </section>
 
@@ -252,7 +294,7 @@ export default function PrivacyPage() {
             <p>
               เราอาจปรับปรุงนโยบายฉบับนี้เป็นครั้งคราว
               หากมีการเปลี่ยนแปลงสาระสำคัญ เราจะประกาศบนหน้านี้
-              พร้อมแก้ไขวันที่ &ldquo;อัปเดตล่าสุด&rdquo; ด้านบน
+              พร้อมแก้ไขวันที่ &ldquo;วันที่บังคับใช้&rdquo; ด้านบน
               ขอแนะนำให้ท่านตรวจสอบหน้านี้เป็นระยะ
             </p>
           </section>
