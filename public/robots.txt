@@ -1,0 +1,17 @@
+# *
+User-agent: *
+Allow: /
+
+# GPTBot
+User-agent: GPTBot
+Disallow: /
+
+# AhrefsBot
+User-agent: AhrefsBot
+Crawl-delay: 10
+
+# Host
+Host: https://phonbaan.com
+
+# Sitemaps
+Sitemap: https://phonbaan.com/sitemap.xml
