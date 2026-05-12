@@ -2,6 +2,7 @@ import Link from "next/link";
 import type { ReactNode } from "react";
 import { Calculator } from "lucide-react";
 import AccordionFAQ, { type FAQItem } from "@/components/AccordionFAQ";
+import ToolsBar from "@/components/ToolsBar";
 
 export interface RelatedTool {
   href: string;
@@ -144,8 +145,11 @@ export default function CalculatorPageLayout({
         </div>
       </section>
 
+      {/* Tools bar — discoverability of other calculators */}
+      <ToolsBar currentPath={canonicalPath} />
+
       {/* Calculator */}
-      <section className="container-wrap pb-12">{calculator}</section>
+      <section className="container-wrap pb-12 pt-4 md:pt-6">{calculator}</section>
 
       {/* Page-specific content (how-to, formula, examples, etc.) */}
       {children}

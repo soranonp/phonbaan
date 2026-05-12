@@ -108,6 +108,7 @@ export default function KhondoPage() {
           initialLoan={1_500_000}
           initialRate={3.5}
           initialYears={25}
+          variant="condo"
         />
       }
       faqs={FAQS}

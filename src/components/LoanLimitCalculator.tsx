@@ -7,6 +7,8 @@ import {
 } from "@/lib/calculations";
 import { formatNumber, formatTHB } from "@/lib/format";
 import SliderInput from "@/components/SliderInput";
+import ResultCard from "@/components/ResultCard";
+import ExportButton from "@/components/ExportButton";
 
 const OCCUPATIONS = [
   {
@@ -79,7 +81,60 @@ export default function LoanLimitCalculator() {
     });
   }, [monthlyIncome, existingDebt, dsr, annualRate, effectiveYears]);
 
+  const occLabel =
+    OCCUPATIONS.find((o) => o.value === occupation)?.label ?? "พนักงานประจำ";
+
   return (
+    <>
+      <div
+        aria-hidden="true"
+        style={{
+          position: "absolute",
+          left: "-99999px",
+          top: 0,
+          pointerEvents: "none",
+        }}
+      >
+        <ResultCard
+          id="export-loan-limit-result"
+          title="วงเงินกู้ที่อนุมัติได้"
+          subtitle={`รายได้ ${formatTHB(monthlyIncome)}/เดือน · DSR ${Math.round(dsr * 100)}%`}
+          inputs={[
+            {
+              label: "รายได้ต่อเดือน",
+              value: `${formatNumber(monthlyIncome)} บาท`,
+            },
+            {
+              label: "ภาระหนี้ปัจจุบัน",
+              value: `${formatNumber(existingDebt)} บาท`,
+            },
+            { label: "อายุ", value: `${age} ปี` },
+            { label: "อาชีพ", value: occLabel },
+            { label: "ดอกเบี้ยคาดการณ์", value: `${annualRate.toFixed(2)}%` },
+            {
+              label: "ระยะเวลาผ่อน",
+              value: `${effectiveYears} ปี`,
+            },
+          ]}
+          results={[
+            {
+              label: "วงเงินกู้สูงสุด",
+              value: `${formatNumber(result.maxLoan)} บาท`,
+              highlight: true,
+            },
+            {
+              label: "ค่างวดต่อเดือน",
+              value: `${formatNumber(monthlyPayment)} บาท`,
+            },
+            {
+              label: "เพดานค่างวดตามเกณฑ์",
+              value: `${formatNumber(result.maxPayment)} บาท`,
+            },
+          ]}
+          toolUrl="phonbaan.com/wong-ngern-ku"
+        />
+      </div>
+
     <section
       aria-label="เครื่องคำนวณวงเงินกู้บ้าน"
       className="rounded-3xl border border-line bg-white/70 p-5 shadow-sm md:p-8"
@@ -203,6 +258,12 @@ export default function LoanLimitCalculator() {
             </p>
           </div>
         </div>
+        <div className="flex justify-end pt-2">
+          <ExportButton
+            targetId="export-loan-limit-result"
+            filenamePrefix="phonbaan-wong-ngern-ku"
+          />
+        </div>
       </div>
 
       {/* Sensitivity table */}
@@ -262,5 +323,6 @@ export default function LoanLimitCalculator() {
         </div>
       </div>
     </section>
+    </>
   );
 }

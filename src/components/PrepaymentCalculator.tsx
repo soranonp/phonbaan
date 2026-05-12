@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import {
   CartesianGrid,
   Legend,
@@ -12,12 +12,14 @@ import {
   YAxis,
 } from "recharts";
 import {
-  calculateMonthlyPayment,
-  calculatePrepayment,
+  calculatePrepaymentScenario,
+  type PrepayFrequency,
 } from "@/lib/calculations";
 import { formatNumber, formatNumberShort, formatTHB } from "@/lib/format";
 import ChartTooltip from "@/components/charts/ChartTooltip";
 import SliderInput from "@/components/SliderInput";
+import ResultCard from "@/components/ResultCard";
+import ExportButton from "@/components/ExportButton";
 
 const COLOR_BEFORE = "#ffb81c"; // gold — used on line + tooltip
 const COLOR_AFTER = "#00529c"; // primary — used on line
@@ -25,34 +27,57 @@ const TOOLTIP_AFTER = "#60a5fa"; // blue-400 — readable on dark tooltip bg
 
 type Mode = "reducePayment" | "reduceTerm";
 
+const FREQ_DEFAULTS: Record<PrepayFrequency, number> = {
+  once: 200_000,
+  monthly: 3_000,
+  yearly: 50_000,
+};
+
+const FREQ_BOUNDS: Record<PrepayFrequency, { min: number; max: number; step: number }> = {
+  once: { min: 10_000, max: 5_000_000, step: 10_000 },
+  monthly: { min: 500, max: 50_000, step: 500 },
+  yearly: { min: 5_000, max: 500_000, step: 5_000 },
+};
+
+const FREQ_LABEL: Record<PrepayFrequency, string> = {
+  once: "จำนวนเงินที่จะโปะ (ครั้งเดียว)",
+  monthly: "จำนวนเงินที่จะโปะ (ต่อเดือน เพิ่มจากค่างวด)",
+  yearly: "จำนวนเงินที่จะโปะ (ต่อปี)",
+};
+
+const FREQ_TAB_LABEL: Record<PrepayFrequency, string> = {
+  once: "โปะครั้งเดียว",
+  monthly: "โปะรายเดือน",
+  yearly: "โปะรายปี",
+};
+
 export default function PrepaymentCalculator() {
   const [balance, setBalance] = useState(2_500_000);
   const [annualRate, setAnnualRate] = useState(5);
   const [remainingYears, setRemainingYears] = useState(25);
-  const [lumpSum, setLumpSum] = useState(300_000);
+  const [frequency, setFrequency] = useState<PrepayFrequency>("once");
+  const [prepayAmount, setPrepayAmount] = useState(FREQ_DEFAULTS.once);
   const [mode, setMode] = useState<Mode>("reduceTerm");
 
-  // Auto-derive baseline payment from balance/rate/years.
-  // User cannot override directly — keeps the math consistent and the form simpler.
-  const currentPayment = useMemo(
-    () => calculateMonthlyPayment(balance, annualRate, remainingYears),
-    [balance, annualRate, remainingYears],
-  );
+  // Reset prepay amount to a sensible default when frequency changes
+  useEffect(() => {
+    setPrepayAmount(FREQ_DEFAULTS[frequency]);
+  }, [frequency]);
 
   const result = useMemo(
     () =>
-      calculatePrepayment({
+      calculatePrepaymentScenario({
         balance,
         annualRate,
         remainingYears,
-        currentPayment,
-        lumpSum,
+        prepayAmount,
+        prepayFrequency: frequency,
         mode,
       }),
-    [balance, annualRate, remainingYears, currentPayment, lumpSum, mode],
+    [balance, annualRate, remainingYears, prepayAmount, frequency, mode],
   );
 
-  // Sample comparison data — too many monthly points slow the chart, so step to yearly
+  // Sample comparison data — yearly buckets keep the chart responsive
   const chartData = useMemo(() => {
     const step = Math.max(1, Math.floor(result.comparison.length / 60));
     return result.comparison
@@ -64,45 +89,140 @@ export default function PrepaymentCalculator() {
       }));
   }, [result.comparison]);
 
-  const newRemainingYears = result.newRemainingMonths / 12;
   const oldRemainingMonths = Math.round(remainingYears * 12);
+  const bounds = FREQ_BOUNDS[frequency];
+  // Cap one-time prepay at the current balance so the input never exceeds the loan
+  const onceMax = Math.max(FREQ_BOUNDS.once.min, Math.min(FREQ_BOUNDS.once.max, balance));
+  const effectiveMax = frequency === "once" ? onceMax : bounds.max;
+  // Mode toggle only meaningful for "once" — monthly/yearly always behave as reduce-term
+  const showModeToggle = frequency === "once";
+
+  const yearsSaved = Math.floor(result.monthsSaved / 12);
+  const monthsSavedRemainder = result.monthsSaved % 12;
+  const timeSavedLabel =
+    result.monthsSaved === 0
+      ? "—"
+      : yearsSaved > 0
+        ? `${yearsSaved} ปี ${monthsSavedRemainder} เดือน`
+        : `${result.monthsSaved} เดือน`;
+
+  const freqSuffix =
+    frequency === "monthly"
+      ? "/เดือน"
+      : frequency === "yearly"
+        ? "/ปี"
+        : " (ครั้งเดียว)";
 
   return (
+    <>
+      <div
+        aria-hidden="true"
+        style={{
+          position: "absolute",
+          left: "-99999px",
+          top: 0,
+          pointerEvents: "none",
+        }}
+      >
+        <ResultCard
+          id="export-prepayment-result"
+          title="ผลการโปะบ้าน"
+          subtitle={`ยอดหนี้คงเหลือ ${formatTHB(balance)} · ${remainingYears} ปี`}
+          inputs={[
+            { label: "ยอดหนี้คงเหลือ", value: `${formatNumber(balance)} บาท` },
+            { label: "ดอกเบี้ย", value: `${annualRate.toFixed(2)}% ต่อปี` },
+            { label: "ระยะเวลาคงเหลือ", value: `${remainingYears} ปี` },
+            { label: "ความถี่ในการโปะ", value: FREQ_TAB_LABEL[frequency] },
+            {
+              label: "จำนวนเงินที่โปะ",
+              value: `${formatNumber(prepayAmount)} บาท${freqSuffix}`,
+            },
+          ]}
+          results={[
+            {
+              label: "ประหยัดดอกเบี้ย",
+              value: `${formatNumber(result.interestSaved)} บาท`,
+              highlight: true,
+            },
+            { label: "ผ่อนหมดเร็วขึ้น", value: timeSavedLabel, highlight: true },
+            {
+              label: "ค่างวดเดิม → ใหม่",
+              value: `${formatNumber(result.baselinePayment)} → ${formatNumber(result.effectiveMonthlyPayment)} บาท`,
+            },
+            {
+              label: "โปะรวมตลอดสัญญา",
+              value: `${formatNumber(result.totalPrepaid)} บาท`,
+            },
+          ]}
+          toolUrl="phonbaan.com/pho-baan"
+        />
+      </div>
+
     <section
       aria-label="เครื่องคำนวณโปะบ้าน"
       className="rounded-3xl border border-line bg-white/70 p-5 shadow-sm md:p-8"
     >
-      {/* Mode tabs */}
-      <div className="mb-6 flex flex-wrap gap-2">
-        <button
-          type="button"
-          onClick={() => setMode("reduceTerm")}
-          className={`rounded-full px-4 py-2 text-sm font-medium transition-colors ${
-            mode === "reduceTerm"
-              ? "bg-accent text-white shadow-sm"
-              : "border border-line bg-white text-ink-soft hover:border-accent/40 hover:text-accent"
-          }`}
-          aria-pressed={mode === "reduceTerm"}
-        >
-          ลดระยะเวลาผ่อน
-        </button>
-        <button
-          type="button"
-          onClick={() => setMode("reducePayment")}
-          className={`rounded-full px-4 py-2 text-sm font-medium transition-colors ${
-            mode === "reducePayment"
-              ? "bg-accent text-white shadow-sm"
-              : "border border-line bg-white text-ink-soft hover:border-accent/40 hover:text-accent"
-          }`}
-          aria-pressed={mode === "reducePayment"}
-        >
-          ลดค่างวด
-        </button>
+      {/* Frequency tabs */}
+      <div className="mb-4">
+        <p className="mb-2 text-xs font-semibold uppercase tracking-wider text-ink-soft">
+          ความถี่ในการโปะ
+        </p>
+        <div className="inline-flex flex-wrap gap-2 rounded-xl border border-line bg-bg/40 p-1">
+          {(Object.keys(FREQ_TAB_LABEL) as PrepayFrequency[]).map((f) => (
+            <button
+              key={f}
+              type="button"
+              onClick={() => setFrequency(f)}
+              className={`rounded-lg px-3.5 py-1.5 text-sm font-medium transition-colors ${
+                frequency === f
+                  ? "bg-accent text-white shadow-sm"
+                  : "text-ink-soft hover:text-accent"
+              }`}
+              aria-pressed={frequency === f}
+            >
+              {FREQ_TAB_LABEL[f]}
+            </button>
+          ))}
+        </div>
       </div>
-      <p className="-mt-4 mb-6 text-xs text-ink-soft md:text-sm">
-        {mode === "reduceTerm"
-          ? "คงค่างวดเดิม → ผ่อนหมดเร็วขึ้น (ประหยัดดอกเบี้ยรวมได้มากกว่า)"
-          : "คงระยะเวลาเดิม → ค่างวดถูกลง (มีเงินเหลือเพิ่มทุกเดือน)"}
+
+      {/* Mode tabs — only for one-time prepayment */}
+      {showModeToggle && (
+        <div className="mb-6 flex flex-wrap gap-2">
+          <button
+            type="button"
+            onClick={() => setMode("reduceTerm")}
+            className={`rounded-full px-4 py-2 text-sm font-medium transition-colors ${
+              mode === "reduceTerm"
+                ? "bg-accent text-white shadow-sm"
+                : "border border-line bg-white text-ink-soft hover:border-accent/40 hover:text-accent"
+            }`}
+            aria-pressed={mode === "reduceTerm"}
+          >
+            ลดระยะเวลาผ่อน
+          </button>
+          <button
+            type="button"
+            onClick={() => setMode("reducePayment")}
+            className={`rounded-full px-4 py-2 text-sm font-medium transition-colors ${
+              mode === "reducePayment"
+                ? "bg-accent text-white shadow-sm"
+                : "border border-line bg-white text-ink-soft hover:border-accent/40 hover:text-accent"
+            }`}
+            aria-pressed={mode === "reducePayment"}
+          >
+            ลดค่างวด
+          </button>
+        </div>
+      )}
+      <p className="mb-6 text-xs text-ink-soft md:text-sm">
+        {frequency === "once"
+          ? mode === "reduceTerm"
+            ? "คงค่างวดเดิม → ผ่อนหมดเร็วขึ้น (ประหยัดดอกเบี้ยรวมได้มากกว่า)"
+            : "คงระยะเวลาเดิม → ค่างวดถูกลง (มีเงินเหลือเพิ่มทุกเดือน)"
+          : frequency === "monthly"
+            ? "เพิ่มเงินทุกเดือนเข้าค่างวด → ผ่อนหมดเร็วและประหยัดดอกเบี้ยมาก"
+            : "เก็บเงินทั้งปีโปะทีเดียวทุก 12 เดือน → เหมาะกับคนได้โบนัสปลายปี"}
       </p>
 
       {/* Inputs */}
@@ -135,16 +255,16 @@ export default function PrepaymentCalculator() {
           max={40}
           step={1}
           format={(n) => String(Math.round(n))}
-          hint={`ค่างวดปัจจุบันโดยประมาณ: ${formatTHB(currentPayment)}/เดือน`}
+          hint={`ค่างวดปัจจุบันโดยประมาณ: ${formatTHB(result.baselinePayment)}/เดือน`}
         />
         <SliderInput
-          label="จำนวนเงินที่จะโปะ"
+          label={FREQ_LABEL[frequency]}
           unit="บาท"
-          value={lumpSum}
-          onChange={setLumpSum}
-          min={10_000}
-          max={Math.max(50_000, balance)}
-          step={10_000}
+          value={prepayAmount}
+          onChange={setPrepayAmount}
+          min={bounds.min}
+          max={effectiveMax}
+          step={bounds.step}
         />
       </div>
 
@@ -163,11 +283,14 @@ export default function PrepaymentCalculator() {
           </span>
         </p>
         <p className="mt-3 text-xs text-emerald-800/85 md:text-sm">
-          {mode === "reduceTerm"
-            ? result.monthsSaved > 0
+          {frequency === "once" && mode === "reducePayment"
+            ? `ค่างวดใหม่ลดลง ${formatTHB(Math.max(0, result.baselinePayment - result.effectiveMonthlyPayment))}/เดือน`
+            : result.monthsSaved > 0
               ? `ผ่อนหมดเร็วขึ้น ${result.monthsSaved} เดือน (~${(result.monthsSaved / 12).toFixed(1)} ปี)`
-              : "ยังไม่ประหยัดเวลา ลองเพิ่มจำนวนเงินที่จะโปะ"
-            : `ค่างวดใหม่ลดลง ${formatTHB(Math.max(0, currentPayment - result.newPayment))}/เดือน`}
+              : "ยังไม่ประหยัดเวลา ลองเพิ่มจำนวนเงินที่จะโปะ"}
+        </p>
+        <p className="mt-2 text-xs text-emerald-800/70 md:text-sm">
+          โปะรวมตลอดสัญญา: {formatTHB(result.totalPrepaid)}
         </p>
       </div>
 
@@ -187,7 +310,7 @@ export default function PrepaymentCalculator() {
             <li className="flex justify-between">
               <span>ค่างวดต่อเดือน</span>
               <span className="font-mono font-semibold text-ink">
-                {formatNumber(currentPayment)} บาท
+                {formatNumber(result.baselinePayment)} บาท
               </span>
             </li>
             <li className="flex justify-between">
@@ -206,19 +329,18 @@ export default function PrepaymentCalculator() {
         </div>
         <div className="rounded-2xl border-2 border-accent/40 bg-accent/5 p-6">
           <p className="text-xs font-semibold uppercase tracking-wider text-accent">
-            หลังโปะ {formatTHB(lumpSum)}
+            หลังโปะ
+            {frequency === "once"
+              ? ` ${formatTHB(prepayAmount)}`
+              : frequency === "monthly"
+                ? ` ${formatTHB(prepayAmount)}/เดือน`
+                : ` ${formatTHB(prepayAmount)}/ปี`}
           </p>
           <ul className="mt-4 space-y-2 text-sm text-ink-soft">
             <li className="flex justify-between">
-              <span>ยอดหนี้ใหม่</span>
+              <span>{frequency === "monthly" ? "ค่างวดรวม (รวมโปะ)" : "ค่างวดต่อเดือน"}</span>
               <span className="font-mono font-semibold text-ink">
-                {formatNumber(Math.max(0, balance - lumpSum))} บาท
-              </span>
-            </li>
-            <li className="flex justify-between">
-              <span>ค่างวดต่อเดือน</span>
-              <span className="font-mono font-semibold text-ink">
-                {formatNumber(result.newPayment)} บาท
+                {formatNumber(result.effectiveMonthlyPayment)} บาท
               </span>
             </li>
             <li className="flex justify-between">
@@ -232,6 +354,12 @@ export default function PrepaymentCalculator() {
                 )}
               </span>
             </li>
+            <li className="flex justify-between">
+              <span>โปะรวมตลอดสัญญา</span>
+              <span className="font-mono font-semibold text-ink">
+                {formatNumber(result.totalPrepaid)} บาท
+              </span>
+            </li>
             <li className="flex justify-between border-t border-accent/20 pt-2">
               <span>ดอกเบี้ยที่จะจ่าย</span>
               <span className="font-mono font-semibold text-accent">
@@ -240,6 +368,13 @@ export default function PrepaymentCalculator() {
             </li>
           </ul>
         </div>
+      </div>
+
+      <div className="mt-4 flex justify-end">
+        <ExportButton
+          targetId="export-prepayment-result"
+          filenamePrefix="phonbaan-prepayment"
+        />
       </div>
 
       {/* Comparison chart */}
@@ -307,5 +442,6 @@ export default function PrepaymentCalculator() {
         </div>
       </div>
     </section>
+    </>
   );
 }

@@ -293,6 +293,195 @@ export const calculatePrepayment = (params: {
   };
 };
 
+export type PrepayFrequency = "once" | "monthly" | "yearly";
+
+export interface PrepaymentScenarioResult {
+  /** Baseline (before) monthly payment */
+  baselinePayment: number;
+  /** Effective monthly cash outflow after prepayment (basePayment + monthly extra for "monthly" freq) */
+  effectiveMonthlyPayment: number;
+  /** Months until the loan is fully paid off in the new scenario */
+  newRemainingMonths: number;
+  /** Months saved vs original remaining term */
+  monthsSaved: number;
+  /** Total interest if the user did nothing */
+  totalInterestBefore: number;
+  /** Total interest with the prepayment plan applied */
+  totalInterestAfter: number;
+  /** Interest saved (>= 0) */
+  interestSaved: number;
+  /** Sum of all extra (prepaid) money over the life of the loan */
+  totalPrepaid: number;
+  /** Monthly balance comparison: { month, before, after } */
+  comparison: { month: number; before: number; after: number }[];
+}
+
+interface AmortizeAfterArgs {
+  balance: number;
+  monthlyRate: number;
+  basePayment: number;
+  oncePrepay?: number;
+  monthlyPrepay?: number;
+  yearlyPrepay?: number;
+  maxMonths: number;
+}
+
+const amortizeAfter = ({
+  balance,
+  monthlyRate,
+  basePayment,
+  oncePrepay = 0,
+  monthlyPrepay = 0,
+  yearlyPrepay = 0,
+  maxMonths,
+}: AmortizeAfterArgs): {
+  rows: { month: number; balance: number }[];
+  totalInterest: number;
+  totalPrepaid: number;
+} => {
+  const rows: { month: number; balance: number }[] = [];
+  let b = balance;
+  let totalInterest = 0;
+  let totalPrepaid = 0;
+
+  if (oncePrepay > 0) {
+    const lump = Math.min(oncePrepay, b);
+    b -= lump;
+    totalPrepaid += lump;
+  }
+
+  for (let m = 1; m <= maxMonths && b > 0; m++) {
+    const interest = b * monthlyRate;
+    const principal = Math.min(b, Math.max(0, basePayment + monthlyPrepay - interest));
+    b = Math.max(0, b - principal);
+    totalInterest += interest;
+    if (monthlyPrepay > 0 && principal > 0) {
+      // Approximate extra contribution: anything above what basePayment alone could have applied to principal
+      const baseline = Math.max(0, basePayment - interest);
+      totalPrepaid += Math.max(0, principal - baseline);
+    }
+
+    if (yearlyPrepay > 0 && m % 12 === 0 && b > 0) {
+      const yearLump = Math.min(yearlyPrepay, b);
+      b -= yearLump;
+      totalPrepaid += yearLump;
+    }
+
+    rows.push({ month: m, balance: b });
+  }
+
+  return { rows, totalInterest, totalPrepaid };
+};
+
+/**
+ * คำนวณผลการโปะแบบ generalized — รองรับโปะครั้งเดียว, โปะรายเดือน, โปะรายปี
+ * mode='reduceTerm' = ค่างวดเดิม → ผ่อนหมดเร็วขึ้น (default behavior สำหรับ monthly/yearly)
+ * mode='reducePayment' = ลดค่างวด → ใช้ได้กับ frequency='once' เท่านั้น (monthly/yearly จะถูกบังคับเป็น reduceTerm)
+ */
+export const calculatePrepaymentScenario = (params: {
+  balance: number;
+  annualRate: number;
+  remainingYears: number;
+  prepayAmount: number;
+  prepayFrequency: PrepayFrequency;
+  mode: "reducePayment" | "reduceTerm";
+}): PrepaymentScenarioResult => {
+  const empty: PrepaymentScenarioResult = {
+    baselinePayment: 0,
+    effectiveMonthlyPayment: 0,
+    newRemainingMonths: 0,
+    monthsSaved: 0,
+    totalInterestBefore: 0,
+    totalInterestAfter: 0,
+    interestSaved: 0,
+    totalPrepaid: 0,
+    comparison: [],
+  };
+
+  const {
+    balance,
+    annualRate,
+    remainingYears,
+    prepayAmount,
+    prepayFrequency,
+    mode,
+  } = params;
+
+  if (!isValid(balance, remainingYears)) return empty;
+  if (!Number.isFinite(annualRate) || annualRate < 0) return empty;
+  if (!Number.isFinite(prepayAmount) || prepayAmount < 0) return empty;
+
+  const baselinePayment = calculateMonthlyPayment(balance, annualRate, remainingYears);
+  if (baselinePayment <= 0) return empty;
+
+  const r = annualRate / 100 / 12;
+  const nRem = Math.round(remainingYears * 12);
+  const beforeSchedule = balanceSchedule(balance, r, baselinePayment, nRem);
+  const totalInterestBefore = Math.max(0, baselinePayment * nRem - balance);
+
+  let afterRows: { month: number; balance: number }[] = [];
+  let effectivePayment = baselinePayment;
+  let totalInterestAfter = 0;
+  let totalPrepaid = 0;
+
+  if (prepayFrequency === "once" && mode === "reducePayment") {
+    const lump = Math.min(prepayAmount, balance);
+    const newBalance = balance - lump;
+    effectivePayment = calculateMonthlyPayment(newBalance, annualRate, remainingYears);
+    afterRows = balanceSchedule(newBalance, r, effectivePayment, nRem);
+    totalInterestAfter = Math.max(0, effectivePayment * nRem - newBalance);
+    totalPrepaid = lump;
+  } else {
+    // reduceTerm path — covers once+reduceTerm, monthly, yearly
+    const oncePrepay = prepayFrequency === "once" ? prepayAmount : 0;
+    const monthlyPrepay = prepayFrequency === "monthly" ? prepayAmount : 0;
+    const yearlyPrepay = prepayFrequency === "yearly" ? prepayAmount : 0;
+    const result = amortizeAfter({
+      balance,
+      monthlyRate: r,
+      basePayment: baselinePayment,
+      oncePrepay,
+      monthlyPrepay,
+      yearlyPrepay,
+      maxMonths: nRem,
+    });
+    afterRows = result.rows;
+    totalInterestAfter = result.totalInterest;
+    totalPrepaid = result.totalPrepaid;
+    effectivePayment =
+      prepayFrequency === "monthly" ? baselinePayment + prepayAmount : baselinePayment;
+  }
+
+  const newRemainingMonths = afterRows.length;
+  const monthsSaved = Math.max(0, nRem - newRemainingMonths);
+  const interestSaved = Math.max(0, totalInterestBefore - totalInterestAfter);
+
+  // Build comparison schedule capped at the longer of the two scenarios
+  const horizon = Math.max(nRem, newRemainingMonths);
+  const beforeByMonth = new Map(beforeSchedule.map((row) => [row.month, row.balance]));
+  const afterByMonth = new Map(afterRows.map((row) => [row.month, row.balance]));
+  const comparison: { month: number; before: number; after: number }[] = [];
+  for (let m = 1; m <= horizon; m++) {
+    comparison.push({
+      month: m,
+      before: beforeByMonth.get(m) ?? 0,
+      after: afterByMonth.get(m) ?? 0,
+    });
+  }
+
+  return {
+    baselinePayment,
+    effectiveMonthlyPayment: effectivePayment,
+    newRemainingMonths,
+    monthsSaved,
+    totalInterestBefore,
+    totalInterestAfter,
+    interestSaved,
+    totalPrepaid,
+    comparison,
+  };
+};
+
 export interface RefinanceResult {
   /** ค่างวดเดิม */
   oldPayment: number;

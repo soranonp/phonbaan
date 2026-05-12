@@ -1,16 +1,9 @@
 import Link from "next/link";
 import type { Metadata } from "next";
-import {
-  Calculator,
-  Sliders,
-  ChartBarStacked,
-  Building2,
-  PiggyBank,
-  Landmark,
-  RefreshCw,
-} from "lucide-react";
+import { Calculator, Sliders, ChartBarStacked } from "lucide-react";
 import LoanCalculator from "@/components/LoanCalculator";
 import AccordionFAQ, { type FAQItem } from "@/components/AccordionFAQ";
+import ToolsBar from "@/components/ToolsBar";
 import {
   calculateMonthlyPayment,
   calculateTotalInterest,
@@ -37,33 +30,6 @@ const HOW_TO_STEPS = [
     icon: ChartBarStacked,
     title: "3. วางแผนการผ่อน",
     desc: "ดูตารางผ่อนรายเดือนและกราฟเปรียบเทียบเงินต้นกับดอกเบี้ย เพื่อวางแผนโปะหรือรีไฟแนนซ์",
-  },
-] as const;
-
-const RELATED_TOOLS = [
-  {
-    href: "/khondo",
-    icon: Building2,
-    title: "คำนวณผ่อนคอนโด",
-    desc: "เครื่องคำนวณค่างวดสำหรับคนซื้อคอนโด พร้อมประเมินค่าใช้จ่ายส่วนกลาง",
-  },
-  {
-    href: "/pho-baan",
-    icon: PiggyBank,
-    title: "คำนวณโปะบ้าน",
-    desc: "ดูว่าการโปะเงินก้อนช่วยลดดอกเบี้ยและร่นเวลาผ่อนได้กี่ปี",
-  },
-  {
-    href: "/wong-ngern-ku",
-    icon: Landmark,
-    title: "คำนวณวงเงินกู้",
-    desc: "ประเมินวงเงินสูงสุดที่ธนาคารจะปล่อยกู้จากรายได้ของคุณ",
-  },
-  {
-    href: "/refinance",
-    icon: RefreshCw,
-    title: "คำนวณรีไฟแนนซ์",
-    desc: "เปรียบเทียบสินเชื่อเก่ากับเงื่อนไขใหม่ ดูว่ารีไฟแนนซ์คุ้มไหม",
   },
 ] as const;
 
@@ -155,8 +121,11 @@ export default function Home() {
         </div>
       </section>
 
+      {/* Tools bar — discoverability of other calculators */}
+      <ToolsBar currentPath="/" />
+
       {/* Calculator */}
-      <section className="container-wrap pb-12">
+      <section className="container-wrap pb-12 pt-4 md:pt-6">
         <LoanCalculator />
       </section>
 
@@ -305,40 +274,6 @@ export default function Home() {
               </div>
             );
           })}
-        </div>
-      </section>
-
-      {/* Related tools */}
-      <section className="container-wrap py-12">
-        <div className="mx-auto max-w-2xl text-center">
-          <h2 className="font-display text-2xl md:text-3xl font-semibold tracking-tight text-ink">
-            เครื่องมือเพิ่มเติม
-          </h2>
-          <p className="mt-2 text-sm text-ink-soft md:text-base">
-            เครื่องคำนวณอื่นๆ ที่ช่วยวางแผนการเงินบ้านของคุณ
-          </p>
-        </div>
-        <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-          {RELATED_TOOLS.map((tool) => (
-            <Link
-              key={tool.href}
-              href={tool.href}
-              className="group flex flex-col rounded-2xl border border-line bg-white/70 p-6 transition-all hover:-translate-y-0.5 hover:border-accent/40 hover:shadow-md"
-            >
-              <div className="inline-flex h-10 w-10 items-center justify-center rounded-xl bg-gold-soft/40 text-accent">
-                <tool.icon className="h-5 w-5" />
-              </div>
-              <h3 className="mt-4 font-semibold text-ink group-hover:text-accent">
-                {tool.title}
-              </h3>
-              <p className="mt-2 flex-1 text-sm leading-relaxed text-ink-soft">
-                {tool.desc}
-              </p>
-              <span className="mt-4 inline-flex items-center gap-1 text-xs font-medium text-accent">
-                เปิดเครื่องมือ →
-              </span>
-            </Link>
-          ))}
         </div>
       </section>
 

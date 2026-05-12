@@ -5,6 +5,8 @@ import { CheckCircle2, XCircle } from "lucide-react";
 import { calculateRefinance } from "@/lib/calculations";
 import { formatNumber, formatTHB } from "@/lib/format";
 import SliderInput from "@/components/SliderInput";
+import ResultCard from "@/components/ResultCard";
+import ExportButton from "@/components/ExportButton";
 
 export default function RefinanceCalculator() {
   const [balance, setBalance] = useState(2_500_000);
@@ -34,6 +36,63 @@ export default function RefinanceCalculator() {
   const monthlyPositive = result.monthlySaving > 0;
 
   return (
+    <>
+      <div
+        aria-hidden="true"
+        style={{
+          position: "absolute",
+          left: "-99999px",
+          top: 0,
+          pointerEvents: "none",
+        }}
+      >
+        <ResultCard
+          id="export-refinance-result"
+          title="ผลคำนวณรีไฟแนนซ์"
+          subtitle={`ยอดหนี้ ${formatTHB(balance)} · ${oldRate.toFixed(2)}% → ${newRate.toFixed(2)}%`}
+          inputs={[
+            { label: "ยอดหนี้คงเหลือ", value: `${formatNumber(balance)} บาท` },
+            {
+              label: "ดอกเบี้ยเดิม",
+              value: `${oldRate.toFixed(2)}% · ${oldRemainingYears} ปี`,
+            },
+            {
+              label: "ดอกเบี้ยใหม่",
+              value: `${newRate.toFixed(2)}% · ${newYears} ปี`,
+            },
+            {
+              label: "ค่าใช้จ่ายรีไฟแนนซ์",
+              value: `${formatNumber(refinanceCost)} บาท`,
+            },
+          ]}
+          results={[
+            {
+              label: result.worthwhile ? "ผลการประเมิน" : "ผลการประเมิน",
+              value: result.worthwhile ? "✅ คุ้ม รีไฟแนนซ์ได้" : "❌ ยังไม่คุ้ม",
+              highlight: true,
+            },
+            {
+              label: "ประหยัด/เดือน",
+              value: `${monthlyPositive ? "+" : ""}${formatNumber(result.monthlySaving)} บาท`,
+            },
+            {
+              label: "จุดคุ้มทุน",
+              value:
+                result.breakEvenMonths === null
+                  ? "—"
+                  : result.breakEvenMonths === 0
+                    ? "ทันที"
+                    : `${result.breakEvenMonths} เดือน`,
+            },
+            {
+              label: "ประหยัดรวมสุทธิ",
+              value: `${result.totalSaving >= 0 ? "+" : ""}${formatNumber(result.totalSaving)} บาท`,
+            },
+          ]}
+          toolUrl="phonbaan.com/refinance"
+        />
+      </div>
+
     <section
       aria-label="เครื่องคำนวณรีไฟแนนซ์บ้าน"
       className="rounded-3xl border border-line bg-white/70 p-5 shadow-sm md:p-8"
@@ -228,6 +287,14 @@ export default function RefinanceCalculator() {
           </p>
         </div>
       </div>
+
+      <div className="mt-6 flex justify-end">
+        <ExportButton
+          targetId="export-refinance-result"
+          filenamePrefix="phonbaan-refinance"
+        />
+      </div>
     </section>
+    </>
   );
 }

@@ -19,6 +19,8 @@ import {
 import { formatNumber, formatNumberShort, formatTHB } from "@/lib/format";
 import ChartTooltip from "@/components/charts/ChartTooltip";
 import SliderInput from "@/components/SliderInput";
+import ResultCard from "@/components/ResultCard";
+import ExportButton from "@/components/ExportButton";
 
 const COLOR_PRINCIPAL = "#00529c"; // primary — used on bar
 const COLOR_INTEREST = "#ffb81c"; // accent gold — used on bar + tooltip
@@ -48,13 +50,30 @@ interface LoanCalculatorProps {
   initialLoan?: number;
   initialRate?: number;
   initialYears?: number;
+  /** Variant for export card title & filename — "บ้าน" (default) or "คอนโด" */
+  variant?: "house" | "condo";
 }
+
+const VARIANTS = {
+  house: {
+    title: "ค่างวดผ่อนบ้าน",
+    urlPath: "phonbaan.com",
+    filename: "phonbaan-loan",
+  },
+  condo: {
+    title: "ค่างวดผ่อนคอนโด",
+    urlPath: "phonbaan.com/khondo",
+    filename: "phonbaan-khondo",
+  },
+} as const;
 
 export default function LoanCalculator({
   initialLoan = 3_000_000,
   initialRate = 3.5,
   initialYears = 30,
+  variant = "house",
 }: LoanCalculatorProps = {}) {
+  const v = VARIANTS[variant];
   const [loanAmount, setLoanAmount] = useState(initialLoan);
   const [annualRate, setAnnualRate] = useState(initialRate);
   const [years, setYears] = useState(initialYears);
@@ -76,7 +95,54 @@ export default function LoanCalculator({
   const totalPaid = monthlyPayment * Math.round(years * 12);
   const visibleRows = showAll ? schedule : schedule.slice(0, 12);
 
+  const exportId = `export-loan-${variant}`;
+
   return (
+    <>
+      {/* Hidden render target for PNG export — off-screen, not interactive */}
+      <div
+        aria-hidden="true"
+        style={{
+          position: "absolute",
+          left: "-99999px",
+          top: 0,
+          pointerEvents: "none",
+        }}
+      >
+        <ResultCard
+          id={exportId}
+          title={v.title}
+          subtitle={`${variant === "condo" ? "คอนโด" : "บ้าน"}ราคา ${formatTHB(loanAmount)} · ${Math.round(years)} ปี`}
+          inputs={[
+            { label: "ยอดเงินกู้", value: `${formatNumber(loanAmount)} บาท` },
+            {
+              label: "อัตราดอกเบี้ย",
+              value: `${annualRate.toFixed(2)}% ต่อปี`,
+            },
+            {
+              label: "ระยะเวลาผ่อน",
+              value: `${Math.round(years)} ปี (${Math.round(years * 12)} งวด)`,
+            },
+          ]}
+          results={[
+            {
+              label: "ค่างวดต่อเดือน",
+              value: `${formatNumber(monthlyPayment)} บาท`,
+              highlight: true,
+            },
+            {
+              label: "ดอกเบี้ยรวม",
+              value: `${formatNumber(totalInterest)} บาท`,
+            },
+            {
+              label: "ยอดผ่อนรวมทั้งหมด",
+              value: `${formatNumber(totalPaid)} บาท`,
+            },
+          ]}
+          toolUrl={v.urlPath}
+        />
+      </div>
+
     <section
       aria-label="เครื่องคำนวณค่างวดผ่อนบ้าน"
       className="rounded-3xl border border-line bg-white/70 p-5 shadow-sm md:p-8"
@@ -158,6 +224,9 @@ export default function LoanCalculator({
               เงินต้น + ดอกเบี้ย รวมทั้งหมด
             </p>
           </div>
+        </div>
+        <div className="flex justify-end pt-2">
+          <ExportButton targetId={exportId} filenamePrefix={v.filename} />
         </div>
       </div>
 
@@ -267,7 +336,7 @@ export default function LoanCalculator({
         {schedule.length > 12 && (
           <button
             type="button"
-            onClick={() => setShowAll((v) => !v)}
+            onClick={() => setShowAll((prev) => !prev)}
             className="mt-4 inline-flex items-center gap-2 rounded-lg border border-accent/30 bg-white px-4 py-2 text-sm font-medium text-accent transition-colors hover:bg-accent/5"
           >
             {showAll ? "ย่อตาราง" : `ดูตารางผ่อนทั้งหมด (${schedule.length} งวด)`}
@@ -275,5 +344,6 @@ export default function LoanCalculator({
         )}
       </div>
     </section>
+    </>
   );
 }
