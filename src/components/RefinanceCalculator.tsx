@@ -1,12 +1,13 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { CheckCircle2, XCircle } from "lucide-react";
 import { calculateRefinance } from "@/lib/calculations";
 import { formatNumber, formatTHB } from "@/lib/format";
 import SliderInput from "@/components/SliderInput";
 import ResultCard from "@/components/ResultCard";
 import ExportButton from "@/components/ExportButton";
+import { Analytics } from "@/lib/analytics";
 
 export default function RefinanceCalculator() {
   const [balance, setBalance] = useState(2_500_000);
@@ -34,6 +35,21 @@ export default function RefinanceCalculator() {
   );
 
   const monthlyPositive = result.monthlySaving > 0;
+
+  const firedRef = useRef(false);
+  const skipInitialRef = useRef(true);
+  useEffect(() => {
+    if (skipInitialRef.current) {
+      skipInitialRef.current = false;
+      return;
+    }
+    if (firedRef.current) return;
+    const timer = setTimeout(() => {
+      Analytics.calculatorUsed("refinance");
+      firedRef.current = true;
+    }, 2000);
+    return () => clearTimeout(timer);
+  }, [balance, oldRate, oldRemainingYears, newRate, newYears, refinanceCost]);
 
   return (
     <>
@@ -292,6 +308,7 @@ export default function RefinanceCalculator() {
         <ExportButton
           targetId="export-refinance-result"
           filenamePrefix="phonbaan-refinance"
+          analyticsType="refinance"
         />
       </div>
     </section>

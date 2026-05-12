@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import {
   calculateMaxLoanDetailed,
   calculateMonthlyPayment,
@@ -9,6 +9,7 @@ import { formatNumber, formatTHB } from "@/lib/format";
 import SliderInput from "@/components/SliderInput";
 import ResultCard from "@/components/ResultCard";
 import ExportButton from "@/components/ExportButton";
+import { Analytics } from "@/lib/analytics";
 
 const OCCUPATIONS = [
   {
@@ -83,6 +84,21 @@ export default function LoanLimitCalculator() {
 
   const occLabel =
     OCCUPATIONS.find((o) => o.value === occupation)?.label ?? "พนักงานประจำ";
+
+  const firedRef = useRef(false);
+  const skipInitialRef = useRef(true);
+  useEffect(() => {
+    if (skipInitialRef.current) {
+      skipInitialRef.current = false;
+      return;
+    }
+    if (firedRef.current) return;
+    const timer = setTimeout(() => {
+      Analytics.calculatorUsed("loan-limit");
+      firedRef.current = true;
+    }, 2000);
+    return () => clearTimeout(timer);
+  }, [monthlyIncome, existingDebt, age, occupation, annualRate, years]);
 
   return (
     <>
@@ -262,6 +278,7 @@ export default function LoanLimitCalculator() {
           <ExportButton
             targetId="export-loan-limit-result"
             filenamePrefix="phonbaan-wong-ngern-ku"
+            analyticsType="loan-limit"
           />
         </div>
       </div>

@@ -3,23 +3,27 @@
 import { useState } from "react";
 import { Check, Download, Loader2 } from "lucide-react";
 import { exportElementToPng } from "@/lib/exportImage";
+import { Analytics } from "@/lib/analytics";
 
 interface Props {
   /** id of the hidden ResultCard to capture */
   targetId: string;
   /** Filename prefix (timestamp is appended) */
   filenamePrefix: string;
+  /** Optional GA event label identifying which calculator triggered the export */
+  analyticsType?: string;
 }
 
 type Status = "idle" | "loading" | "done";
 
-export default function ExportButton({ targetId, filenamePrefix }: Props) {
+export default function ExportButton({ targetId, filenamePrefix, analyticsType }: Props) {
   const [status, setStatus] = useState<Status>("idle");
 
   const handleClick = async () => {
     setStatus("loading");
     try {
       await exportElementToPng({ elementId: targetId, filenamePrefix });
+      if (analyticsType) Analytics.exportPng(analyticsType);
       setStatus("done");
       setTimeout(() => setStatus("idle"), 2200);
     } catch (err) {

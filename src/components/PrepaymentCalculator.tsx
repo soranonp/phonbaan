@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import {
   CartesianGrid,
   Legend,
@@ -20,6 +20,7 @@ import ChartTooltip from "@/components/charts/ChartTooltip";
 import SliderInput from "@/components/SliderInput";
 import ResultCard from "@/components/ResultCard";
 import ExportButton from "@/components/ExportButton";
+import { Analytics } from "@/lib/analytics";
 
 const COLOR_BEFORE = "#ffb81c"; // gold — used on line + tooltip
 const COLOR_AFTER = "#00529c"; // primary — used on line
@@ -63,6 +64,21 @@ export default function PrepaymentCalculator() {
   useEffect(() => {
     setPrepayAmount(FREQ_DEFAULTS[frequency]);
   }, [frequency]);
+
+  const firedRef = useRef(false);
+  const skipInitialRef = useRef(true);
+  useEffect(() => {
+    if (skipInitialRef.current) {
+      skipInitialRef.current = false;
+      return;
+    }
+    if (firedRef.current) return;
+    const timer = setTimeout(() => {
+      Analytics.calculatorUsed("prepayment");
+      firedRef.current = true;
+    }, 2000);
+    return () => clearTimeout(timer);
+  }, [balance, annualRate, remainingYears, prepayAmount, frequency, mode]);
 
   const result = useMemo(
     () =>
@@ -374,6 +390,7 @@ export default function PrepaymentCalculator() {
         <ExportButton
           targetId="export-prepayment-result"
           filenamePrefix="phonbaan-prepayment"
+          analyticsType="prepayment"
         />
       </div>
 

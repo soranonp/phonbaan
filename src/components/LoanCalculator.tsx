@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import {
   Bar,
   BarChart,
@@ -21,6 +21,7 @@ import ChartTooltip from "@/components/charts/ChartTooltip";
 import SliderInput from "@/components/SliderInput";
 import ResultCard from "@/components/ResultCard";
 import ExportButton from "@/components/ExportButton";
+import { Analytics } from "@/lib/analytics";
 
 const COLOR_PRINCIPAL = "#00529c"; // primary — used on bar
 const COLOR_INTEREST = "#ffb81c"; // accent gold — used on bar + tooltip
@@ -96,6 +97,22 @@ export default function LoanCalculator({
   const visibleRows = showAll ? schedule : schedule.slice(0, 12);
 
   const exportId = `export-loan-${variant}`;
+  const analyticsType = variant === "condo" ? "khondo" : "loan";
+
+  const firedRef = useRef(false);
+  const skipInitialRef = useRef(true);
+  useEffect(() => {
+    if (skipInitialRef.current) {
+      skipInitialRef.current = false;
+      return;
+    }
+    if (firedRef.current) return;
+    const timer = setTimeout(() => {
+      Analytics.calculatorUsed(analyticsType);
+      firedRef.current = true;
+    }, 2000);
+    return () => clearTimeout(timer);
+  }, [loanAmount, annualRate, years, analyticsType]);
 
   return (
     <>
@@ -226,7 +243,11 @@ export default function LoanCalculator({
           </div>
         </div>
         <div className="flex justify-end pt-2">
-          <ExportButton targetId={exportId} filenamePrefix={v.filename} />
+          <ExportButton
+            targetId={exportId}
+            filenamePrefix={v.filename}
+            analyticsType={analyticsType}
+          />
         </div>
       </div>
 

@@ -1,5 +1,8 @@
+"use client";
+
 import Link from "next/link";
 import { Building2, Home, RefreshCw, TrendingDown, Wallet } from "lucide-react";
+import { Analytics } from "@/lib/analytics";
 
 interface Tool {
   href: string;
@@ -63,6 +66,9 @@ export default function ToolsBar({ currentPath }: ToolsBarProps) {
             <Link
               key={tool.href}
               href={tool.href}
+              onClick={() => {
+                if (!isActive) Analytics.toolBarClicked(tool.href);
+              }}
               aria-current={isActive ? "page" : undefined}
               className={`group flex w-[180px] shrink-0 snap-start flex-col gap-1.5 rounded-xl border bg-white p-3.5 transition-all md:w-auto md:p-4 ${
                 isActive
