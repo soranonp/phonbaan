@@ -1,6 +1,5 @@
 import type { Metadata, Viewport } from "next";
 import { Suspense } from "react";
-import Script from "next/script";
 import { Fraunces, IBM_Plex_Sans_Thai, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 import SiteHeader from "@/components/SiteHeader";
@@ -8,8 +7,9 @@ import SiteFooter from "@/components/SiteFooter";
 import CookieBanner from "@/components/CookieBanner";
 import BackToTop from "@/components/BackToTop";
 import GAPageView from "@/components/GAPageView";
+import GoogleAnalytics from "@/components/GoogleAnalytics";
 
-const GA_ID = process.env.NEXT_PUBLIC_GA_ID;
+const GA_ID = process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID;
 
 // Display: 700 for headings, 600 italic for emphasis inside headings
 const fraunces = Fraunces({
@@ -93,32 +93,6 @@ export const viewport: Viewport = {
   themeColor: "#00529C",
 };
 
-const consentDefaultScript = `
-window.dataLayer = window.dataLayer || [];
-function gtag(){dataLayer.push(arguments);}
-gtag('consent', 'default', {
-  'ad_storage': 'denied',
-  'analytics_storage': 'denied',
-  'ad_user_data': 'denied',
-  'ad_personalization': 'denied',
-  'wait_for_update': 500
-});
-try {
-  var raw = localStorage.getItem('cookie_consent_v1');
-  if (raw) {
-    var c = JSON.parse(raw);
-    if (c && c.version === 'v1') {
-      gtag('consent', 'update', {
-        'ad_storage': c.ads ? 'granted' : 'denied',
-        'analytics_storage': c.analytics ? 'granted' : 'denied',
-        'ad_user_data': c.ads ? 'granted' : 'denied',
-        'ad_personalization': c.ads ? 'granted' : 'denied'
-      });
-    }
-  }
-} catch (e) {}
-`.trim();
-
 const webAppLd = {
   "@context": "https://schema.org",
   "@type": "WebApplication",
@@ -160,21 +134,6 @@ export default function RootLayout({
     >
       <head>
         <script
-          dangerouslySetInnerHTML={{ __html: consentDefaultScript }}
-        />
-        {GA_ID && (
-          <>
-            <Script
-              src={`https://www.googletagmanager.com/gtag/js?id=${GA_ID}`}
-              strategy="lazyOnload"
-            />
-            <Script id="google-analytics" strategy="lazyOnload">
-              {`gtag('js', new Date());
-gtag('config', '${GA_ID}', { send_page_view: false });`}
-            </Script>
-          </>
-        )}
-        <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(webAppLd) }}
         />
@@ -184,6 +143,7 @@ gtag('config', '${GA_ID}', { send_page_view: false });`}
         />
       </head>
       <body className="flex min-h-screen flex-col antialiased">
+        <GoogleAnalytics />
         <a href="#main-content" className="skip-link">
           ข้ามไปยังเนื้อหา
         </a>

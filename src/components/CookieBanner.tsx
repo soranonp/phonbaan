@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import CookiePreferencesModal from "./CookiePreferencesModal";
+import { updateConsent } from "@/lib/analytics";
 
 export const CONSENT_STORAGE_KEY = "cookie_consent_v1";
 export const CONSENT_VERSION = "v1";
@@ -20,17 +21,6 @@ export function openCookieBanner() {
   if (typeof window !== "undefined") {
     window.dispatchEvent(new Event(OPEN_BANNER_EVENT));
   }
-}
-
-function applyConsent(consent: { analytics: boolean; ads: boolean }) {
-  if (typeof window === "undefined") return;
-  window.dataLayer = window.dataLayer || [];
-  window.gtag?.("consent", "update", {
-    ad_storage: consent.ads ? "granted" : "denied",
-    analytics_storage: consent.analytics ? "granted" : "denied",
-    ad_user_data: consent.ads ? "granted" : "denied",
-    ad_personalization: consent.ads ? "granted" : "denied",
-  });
 }
 
 function firePageView() {
@@ -53,7 +43,7 @@ function saveConsent(consent: { analytics: boolean; ads: boolean }) {
   } catch {
     /* ignore */
   }
-  applyConsent(consent);
+  updateConsent({ analytics: consent.analytics, ads: consent.ads });
 }
 
 export default function CookieBanner() {
@@ -73,7 +63,7 @@ export default function CookieBanner() {
           typeof parsed.analytics === "boolean" &&
           typeof parsed.ads === "boolean"
         ) {
-          applyConsent({ analytics: parsed.analytics, ads: parsed.ads });
+          updateConsent({ analytics: parsed.analytics, ads: parsed.ads });
         }
       }
     } catch {
